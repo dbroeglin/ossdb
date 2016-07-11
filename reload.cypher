@@ -9,7 +9,7 @@ MATCH(a) DELETE a;
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS 
 FROM "file:///hosts.csv" as csv 
-CREATE (:Host { 
+CREATE (:Host {
     name   : csv.name, 
     memory : toInt(csv.memory), 
     cores  : toInt(csv.cores)
@@ -26,7 +26,7 @@ MATCH(host:Host {
 CREATE (ip:Ipv4Address { 
     address  : csv.ipv4Address
 })
-CREATE (host)-[:CONTAINS]->(ip)
+CREATE (host)-[:HAS_ADDRESS]->(ip)
 ;
 
 CREATE INDEX ON :Ipv4Address(address);
@@ -71,15 +71,15 @@ CREATE (backend:LoadBalancerBackend {
     name         : csv.backendName, 
     ipv4Address  : csv.backendIpv4Address
 })
-CREATE (loadbalancer)-[:CONTAINS]->(backend)
+CREATE (loadbalancer)-[:BALANCES_TO]->(backend)
 ;
 
 
-// Dummy query 
+// Aggregate data based on IP address 
 
 MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue)
-MATCH (lb:LoadBalancer)-[lbr:CONTAINS]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[hr:CONTAINS]->(ip:Ipv4Address)
+MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[hr:HAS_ADDRESS]->(ip:Ipv4Address)
 WHERE 
   lb.virtualIpv4Address = dnsValue.value 
   AND dns.type = "A"
@@ -88,9 +88,28 @@ MERGE (dns)-[l1:LINKED_TO]->(lb)
 MERGE (lbb)-[l2:LINKED_TO]->(host)
 RETURN dns, dnsValue, lb, host, lbr, hr, l1, l2;
 
+
+// List all DNS names, load balancer and host list
+
 MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
-MATCH (lb:LoadBalancer)-[:CONTAINS]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:CONTAINS]->(ip:Ipv4Address)
+MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+WHERE 
+    lb.virtualIpv4Address = dnsValue.value 
+    AND dns.type = "A"
+    AND ip.address = lbb.ipv4Address
+RETURN 
+    dns.name as dnsName, 
+    lb.virtualIpv4Address AS ip, 
+    collect(host.name) AS hostnames
+ORDER BY dnsName;
+
+
+// Find a subgraph with DNS name www.foo.com
+
+MATCH (dns:DNSRecord { name : "www.foo.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
 WHERE 
     lb.virtualIpv4Address = dnsValue.value 
     AND dns.type = "A"
@@ -99,4 +118,21 @@ RETURN
     dns.name as dnsName, 
     lb.virtualIpv4Address as ip, 
     collect(host.name) as hostnames
-ORDER BY dnsName;
+;
+
+// Find a subgraph containing host jeexxx01
+
+MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+WHERE 
+    lb.virtualIpv4Address = dnsValue.value 
+    AND dns.type = "A"
+    AND ip.address = lbb.ipv4Address
+WITH dns, lb, collect(host.name) AS hostnames
+WHERE any(hostname IN hostnames WHERE hostname = "jeexxx01")
+RETURN 
+    dns.name as dnsName, 
+    lb.virtualIpv4Address as ip, 
+    hostnames
+;
