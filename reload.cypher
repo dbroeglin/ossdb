@@ -120,6 +120,19 @@ RETURN
     collect(host.name) as hostnames
 ;
 
+MATCH (dns:DNSRecord { name : "www.foo.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (dns)-->(lb)
+MATCH (lbb)-->(host)
+WHERE 
+    dns.type = "A"
+RETURN 
+    dns.name as dnsName, 
+    lb.virtualIpv4Address as ip, 
+    collect(host.name) as hostnames
+;
+
 // Find a subgraph containing host jeexxx01
 
 MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 

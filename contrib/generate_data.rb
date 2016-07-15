@@ -55,6 +55,16 @@ open('data/dns_records.csv', 'w') { |f|
     }
 }
 
-
+open('data/apache_services.csv', 'w') { |f|
+    f.puts "name,type,value"
+    f.puts "www.foo.com,A,1.0.3.0"
+    f.puts "www.bar.com,A,1.0.4.0"
+    f.puts "www.foobar.com,CNAME,www.bar.com"
+    250.times { |i|
+        k = i * 2
+        f.puts "www.foo%03d.com,A,1.0.1.%d" % [i, k]
+        f.puts "www.bar%03d.com,A,1.0.2.%d" % [i, k]
+    }
+}
 
 
