@@ -74,16 +74,45 @@ CREATE (backend:LoadBalancerBackend {
 CREATE (loadbalancer)-[:BALANCES_TO]->(backend)
 ;
 
+//
+// Apache Services
+//
+
+CREATE INDEX ON :ApacheService(fqdn);
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS 
+FROM "file:///apache_services.csv" as csv
+MERGE (apache_service:ApacheService { 
+    fqdn : csv.fqdn
+})
+CREATE (ip:Ipv4Address { 
+    address  : csv.ipv4Address
+})
+CREATE (apache_service)-[:BOUND_TO]->(ip)
+;
+
 
 // Aggregate data based on IP address 
 
 MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[hr:HAS_ADDRESS]->(ip:Ipv4Address)
-WHERE 
-  lb.virtualIpv4Address = dnsValue.value 
+WHERE
+  lb.virtualIpv4Address = dnsValue.value
   AND dns.type = "A"
-  AND ip.address = lbb.ipv4Address
 MERGE (dns)-[l1:LINKED_TO]->(lb)
+;
+
+MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[hr:HAS_ADDRESS]->(ip:Ipv4Address)
+WHERE
+  ip.address = lbb.ipv4Address
 MERGE (lbb)-[l2:LINKED_TO]->(host)
-; //RETURN dns, dnsValue, lb, host, lbr, hr, l1, l2;
+;
+
+MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (as:ApacheService)-[bd:BOUND_TO]->(aip:Ipv4Address)
+WHERE
+  lbb.ipv4Address = aip.address
+MERGE (lbb)-[l3:LINKED_TO]->(as)
+;

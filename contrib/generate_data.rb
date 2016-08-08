@@ -58,14 +58,17 @@ open('data/dns_records.csv', 'w') { |f|
 }
 
 open('data/apache_services.csv', 'w') { |f|
-    f.puts "name,type,value"
-    f.puts "www.foo.com,A,1.0.3.0"
-    f.puts "www.bar.com,A,1.0.4.0"
-    f.puts "www.foobar.com,CNAME,www.bar.com"
+    f.puts "fqdn,ipv4Address"
+    f.puts "www.foo.com,10.0.3.0"
+    f.puts "www.foo.com,10.0.3.1"
+    f.puts "www.foo.com,10.0.3.2"
+    f.puts "www.foo.com,10.0.3.3"
     SIZE.times { |i|
-        k = i * 2
-        f.puts "www.foo%03d.com,A,1.0.1.%d" % [i, k]
-        f.puts "www.bar%03d.com,A,1.0.2.%d" % [i, k]
+        f.puts "www.foo%03d.com,10.0.1.%d" % [i, i]
+        f.puts "www.foo%03d.com,10.0.2.%d" % [i, i]
+        
+        f.puts "www.bar%03d.com,10.100.10.%d" % [i, i]
+        f.puts "www.bar%03d.com,10.100.11.%d" % [i, i]
     }
 }
 
