@@ -3,6 +3,27 @@ DELETE r,a,b;
 MATCH(a) DELETE a;
 
 //
+// DNS Records
+//
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS 
+FROM "file:///dns_records.csv" as csv
+CREATE (r:DNSRecordName { 
+    name  : csv.name, 
+    type  : csv.type
+})
+CREATE (v:DNSRecordValue { 
+    value : csv.value
+})
+CREATE (r)-[:CONTAINS]->(v)
+;
+
+CREATE INDEX ON :DNSRecordName(name);
+CREATE INDEX ON :DNSRecordName(value);
+CREATE INDEX ON :DNSRecordValue(value);
+
+//
 // Hosts
 //
 
@@ -32,26 +53,6 @@ CREATE (host)-[:HAS_ADDRESS]->(ip)
 CREATE INDEX ON :Ipv4Address(address);
 
 
-//
-// DNS Records
-//
-
-USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS 
-FROM "file:///dns_records.csv" as csv
-CREATE (r:DNSRecord { 
-    name  : csv.name, 
-    type  : csv.type
-})
-CREATE (v:DNSRecordValue { 
-    value : csv.value
-})
-CREATE (r)-[:CONTAINS]->(v)
-;
-
-CREATE INDEX ON :DNSRecord(name);
-CREATE INDEX ON :DNSRecord(value);
-CREATE INDEX ON :DNSRecordValue(value);
 
 //
 // Load balancers
@@ -95,7 +96,7 @@ CREATE (apache_service)-[:BOUND_TO]->(ip)
 
 // Aggregate data based on IP address 
 
-MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue)
+MATCH (dns:DNSRecordName)-[dr:CONTAINS]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
 WHERE
   lb.virtualIpv4Address = dnsValue.value

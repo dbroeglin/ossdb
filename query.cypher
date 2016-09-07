@@ -73,7 +73,7 @@ RETURN
     hostnames
 ;
 
-MATCH (dns:DNSRecord)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (dns:DNSRecordName)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
 MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
 MATCH (dns)-->(lb)
@@ -89,7 +89,7 @@ RETURN
 ;
 
 
-MATCH (dns:DNSRecord { name : "www.foo994.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (dns:DNSRecordName { name : "www.foo994.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
 MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
 MATCH (dns)-->(lb)
