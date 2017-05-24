@@ -1,7 +1,3 @@
-MATCH (a)-[r]-(b)
-DELETE r,a,b;
-MATCH(a) DELETE a;
-
 //
 // DNS Records
 //
@@ -116,4 +112,3 @@ MATCH (as:ApacheService)-[bd:BOUND_TO]->(aip:Ipv4Address)
 WHERE
   lbb.ipv4Address = aip.address
 MERGE (lbb)-[l3:LINKED_TO]->(as)
-;
