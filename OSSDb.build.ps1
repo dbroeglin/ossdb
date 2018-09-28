@@ -1,4 +1,4 @@
-$Neo4jVersion = "3.1.4"
+$Neo4jVersion = "3.4.5"
 $ImportPath = "/usr/local/Cellar/neo4j/$Neo4jVersion/libexec/import/"
 New-Item $ImportPath -Force -Type Container > $Null
 
@@ -19,6 +19,7 @@ Task Clean {
 }
 
 Task CleanDatabase {
+    
     $Session.Run("MATCH (a)-[r]-(b) DETACH DELETE r,a,b")
     $Session.Run("MATCH(a) DETACH DELETE a")
 }
