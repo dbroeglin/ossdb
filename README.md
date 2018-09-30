@@ -4,6 +4,10 @@
 
 This is a simple experiment. It was tested only on PowerShell core on Mac OS X. Feedback welcome but use at your own risks.
 
+## Case Study 1
+
+![Case Study 1](Documentation/OSSDB-case-study-1.png)
+
 ## Usage
 
 Change the password in ./Connect.ps1
