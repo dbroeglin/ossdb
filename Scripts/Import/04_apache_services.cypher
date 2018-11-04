@@ -6,6 +6,7 @@
 
 CREATE INDEX ON :ApacheInstance(name);
 CREATE INDEX ON :ApacheService(description);
+CREATE INDEX ON :ApacheFQDN(fqdn);
 
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS 

@@ -4,6 +4,10 @@
 // Format: node,type,inRangeLow,inRangeHigh,routerIP,outRangeLow,outRangeHigh,FQDN
 //
 
+CREATE INDEX ON :LinkLoadBalancerNat(fqdn, routerIP, node);
+CREATE INDEX ON :LinkLoadBalancerFQDN(fqdn);
+
+
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS 
 FROM "file:///link_load_balancer.csv" as csv

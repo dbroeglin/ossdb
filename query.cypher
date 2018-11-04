@@ -113,3 +113,22 @@ MATCH (node:Node)-[:CONTAINS]->(instance)
 MATCH (service)-[:HAS_ADDRESS]->(vip:IPv4Address)
 MATCH (vhost)-[:HAS_FQDN]->(fqdn:ApacheFQDN)
 RETURN instance, service, vhost, node, vip, fqdn
+
+// Match a full route
+
+// match on DNS
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
+// match LLB
+MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
+      (oRange)-->(o:IPv4Address)
+MATCH (nat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
+// match Apache
+MATCH (instance:ApacheInstance)-->(service:ApacheService)-->
+      (vhost:ApacheVirtualHost)
+MATCH (node:Node)-[:CONTAINS]->(instance)
+MATCH (service)-[:HAS_ADDRESS]->(vip:IPv4Address)
+MATCH (vhost)-[:HAS_FQDN]->(apacheFQDN:ApacheFQDN)
+MATCH (apacheFQDN)--(llbFQDN)
+WHERE 'www.foo.com' = llbFQDN.fqdn AND dns.name + '.' + zone.name = llbFQDN.fqdn
+RETURN nat, oRange, o, iRange, i, llbFQDN, node, instance, service, vhost, apacheFQDN
