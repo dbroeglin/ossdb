@@ -1,11 +1,15 @@
 . $PSScriptRoot\Connect.ps1
 
-New-Item $Neo4jImportPath -Force -Type Container > $Null
+Task Reload CleanDatabase, Import
 
 Task Import PrepareImports, {
-    Get-ChildItem -Recurse $PSScriptRoot\Sources -Include Reload.cypher | ForEach-Object {
-        Write-Verbose "Processing reload script $_..."
-        (Get-Content -Raw $_) -split ';' | ForEach-Object {
+    Get-ChildItem -Recurse $PSScriptRoot\Scripts\Import -Include *.cypher |
+    Sort-Object -Property Name |
+    ForEach-Object {
+        Write-Information "Processing reload script $_..."
+        (Get-Content -Raw $_) -split ';' |
+        Where-Object { -not [String]::IsNullOrWhiteSpace($_) } |
+        ForEach-Object {
             Write-Verbose "Processing reload command:`n$_"
             $Session.Run($_)
         }
@@ -17,20 +21,22 @@ Task Clean {
 }
 
 Task CleanDatabase {
-    
     $Session.Run("MATCH (a)-[r]-(b) DETACH DELETE r,a,b")
     $Session.Run("MATCH(a) DETACH DELETE a")
 }
 
-Task PrepareImports -Partial -Inputs { 
+Task PrepareImports -Partial -Inputs {
     Get-ChildItem -Recurse $PSScriptRoot\Sources -File
 } -Outputs { 
     process { 
         Join-Path $Neo4jImportPath (Split-Path $_ -Leaf)
     }
 } {
+    begin {
+        New-Item $Neo4jImportPath -Force -Type Container > $Null
+    }
     process {
-        Write-Host "-- Processing $_"
-        cp $_ $2 
+        Write-Host "-- Processing $_ -> $2"
+        Copy-Item -Path $_ -Destination $2 
     }
 }

@@ -6,8 +6,8 @@ This is a simple experiment. It was tested only on PowerShell core on Mac OS X. 
 
 ## Usage
 
-Change the password in ./Connect.ps1
-
+Copy ```Config.sample.ps1``` to ```Config.ps1``` and adjust the configuration to your
+local setup.
 
 Run the following command to completely cleanup your database and reload all CSV files:
 
