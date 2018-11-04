@@ -1,23 +1,3 @@
-//
-// DNS Records
-//
-
-USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS 
-FROM "file:///dns_records.csv" as csv
-CREATE (r:DNSRecordName { 
-    name  : csv.name, 
-    type  : csv.type
-})
-CREATE (v:DNSRecordValue { 
-    value : csv.value
-})
-CREATE (r)-[:CONTAINS]->(v)
-;
-
-CREATE INDEX ON :DNSRecordName(name);
-CREATE INDEX ON :DNSRecordName(value);
-CREATE INDEX ON :DNSRecordValue(value);
 
 //
 // Hosts
@@ -92,11 +72,10 @@ CREATE (apache_service)-[:BOUND_TO]->(ip)
 
 // Aggregate data based on IP address 
 
-MATCH (dns:DNSRecordName)-[dr:CONTAINS]->(dnsValue:DNSRecordValue)
+MATCH (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
 WHERE
   lb.virtualIpv4Address = dnsValue.value
-  AND dns.type = "A"
 MERGE (dns)-[l1:LINKED_TO]->(lb)
 ;
 

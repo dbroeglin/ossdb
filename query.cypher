@@ -1,102 +1,90 @@
 // Graph statistics
 
-MATCH (n) 
-RETURN
-    DISTINCT labels(n),
-    count(*) AS SampleSize,
-    avg(size(keys(n))) as Avg_PropertyCount,
-    min(size(keys(n))) as Min_PropertyCount,
-    max(size(keys(n))) as Max_PropertyCount,
-    avg(size( (n)-[]-() ) ) as Avg_RelationshipCount,
-    min(size( (n)-[]-() ) ) as Min_RelationshipCount,
-    max(size( (n)-[]-() ) ) as Max_RelationshipCount
+MATCH (n)
+RETURN DISTINCT
+  labels(n),
+  count(*) AS SampleSize,
+  avg(size(keys(n))) as Avg_PropertyCount,
+  min(size(keys(n))) as Min_PropertyCount,
+  max(size(keys(n))) as Max_PropertyCount,
+  avg(size( (n)-[]-() ) ) as Avg_RelationshipCount,
+  min(size( (n)-[]-() ) ) as Min_RelationshipCount,
+  max(size( (n)-[]-() ) ) as Max_RelationshipCount
 ;
 
 // List all DNS names, load balancer and host list
 
-MATCH (zone:DNSZone)-->(dns:DNSRecordName)-[dr:HAS_VALUE { type: "A" }]->(dnsValue:DNSRecordValue) 
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
 MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
-WHERE 
-    lb.virtualIpv4Address = dnsValue.value 
-    AND ip.address = lbb.ipv4Address
+WHERE
+  lb.virtualIpv4Address = dnsValue.value
+  AND ip.address        = lbb.ipv4Address
 RETURN
-    dns.name + '.' + zone.name as dnsName, 
-    lb.virtualIpv4Address AS ip, 
-    collect(host.name) AS hostnames
+  dns.name + '.' + zone.name as dnsName,
+  lb.virtualIpv4Address AS ip,
+  collect(host.name) AS hostnames
 ORDER BY dnsName
 
-// Find a subgraph with DNS name www.foo.com
+// Find a subgraph with DNS name www.foo.com (where clause)
 
-MATCH (dns:DNSRecord { name : "www.foo.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (zone:DNSZone{name: 'foo.com'})-->
+      (dns:DNSRecordName{name: 'www'})-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
 MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
-WHERE 
-    lb.virtualIpv4Address = dnsValue.value 
-    AND dns.type = "A"
-    AND ip.address = lbb.ipv4Address
-RETURN 
-    dns.name as dnsName, 
-    lb.virtualIpv4Address as ip, 
-    collect(host.name) as hostnames
+WHERE
+  lb.virtualIpv4Address = dnsValue.value
+  AND ip.address = lbb.ipv4Address
+RETURN
+  dns.name + '.' + zone.name as dnsName,
+  lb.virtualIpv4Address      as ip,
+  collect(host.name)         as hostnames
 ;
 
-MATCH (dns:DNSRecord { name : "www.foo.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
-MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
-MATCH (dns)-->(lb)
-MATCH (lbb)-->(host)
-WHERE 
-    dns.type = "A"
-RETURN 
-    dns.name as dnsName, 
-    lb.virtualIpv4Address as ip, 
-    collect(host.name) as hostnames
-;
+// Find a subgraph with DNS name www.foo.com (graph traversal)
 
-// Find a subgraph containing host jeexxx01
-
-MATCH (dns:DNSRecordName)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
-MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
-WHERE 
-    lb.virtualIpv4Address = dnsValue.value 
-    AND dns.type = "A"
-    AND ip.address = lbb.ipv4Address
-WITH dns, lb, collect(host.name) AS hostnames
-WHERE any(hostname IN hostnames WHERE hostname = "jeexxx01")
-RETURN 
-    dns.name as dnsName, 
-    lb.virtualIpv4Address as ip, 
-    hostnames
-;
-
-MATCH (dns:DNSRecordName)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (zone:DNSZone{name: 'foo.com'})-->
+      (dns:DNSRecordName{name: 'www'})-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
 MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
 MATCH (dns)-->(lb)
 MATCH (lbb)-->(host)
-WHERE 
-    dns.type = "A"
-WITH dns, lb, collect(host.name) AS hostnames
-WHERE any(hostname IN hostnames WHERE hostname = "jeexxx01")
-RETURN 
-    dns.name as dnsName, 
-    lb.virtualIpv4Address as ip, 
-    hostnames
+RETURN
+  dns.name + '.' + zone.name as dnsName,
+  lb.virtualIpv4Address      as ip,
+  collect(host.name)         as hostnames
 ;
 
+// Find a subgraph containing host jeexxx01 (where clause)
 
-MATCH (dns:DNSRecordName { name : "www.foo994.com" })-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
+MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+WHERE
+  lb.virtualIpv4Address = dnsValue.value
+  AND ip.address = lbb.ipv4Address
+WITH zone, dns, lb, collect(host.name) AS hostnames
+WHERE any(hostname IN hostnames WHERE hostname = 'jeexxx01')
+RETURN
+  dns.name + '.' + zone.name as dnsName,
+  lb.virtualIpv4Address      as ip,
+  hostnames
+;
+
+// Find a subgraph containing host jeexxx01 (graph traversal)
+
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
 MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
 MATCH (dns)-->(lb)
 MATCH (lbb)-->(host)
-WHERE 
-    dns.type = "A"
-RETURN 
-    dns.name as dnsName, 
-    lb.virtualIpv4Address as ip, 
-    collect(host.name) as hostnames
+WITH zone, dns, lb, collect(host.name) AS hostnames
+WHERE any(hostname IN hostnames WHERE hostname = 'jeexxx01')
+RETURN
+  dns.name + '.' + zone.name as dnsName,
+  lb.virtualIpv4Address      as ip,
+  hostnames
 ;
-
