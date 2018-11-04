@@ -20,13 +20,13 @@ FROM "file:///hosts_ips.csv" as csv
 MATCH(host:Host { 
     name : csv.name
 }) 
-CREATE (ip:Ipv4Address { 
+CREATE (ip:IPv4Address { 
     address  : csv.ipv4Address
 })
 CREATE (host)-[:HAS_ADDRESS]->(ip)
 ;
 
-CREATE INDEX ON :Ipv4Address(address);
+CREATE INDEX ON :IPv4Address(address);
 
 
 
@@ -34,7 +34,7 @@ CREATE INDEX ON :Ipv4Address(address);
 // Load balancers
 //
 
-CREATE INDEX ON :LoadBalancer(virtualIpv4Address);
+CREATE INDEX ON :LoadBalancer(virtualIPv4Address);
 CREATE INDEX ON :LoadBalancerBackend(ipv4Address);
 
 USING PERIODIC COMMIT
@@ -42,11 +42,11 @@ LOAD CSV WITH HEADERS
 FROM "file:///load_balancers.csv" as csv
 MERGE (loadbalancer:LoadBalancer { 
     name : csv.name, 
-    virtualIpv4Address : csv.virtualIpv4Address 
+    virtualIPv4Address : csv.virtualIPv4Address 
 })
 CREATE (backend:LoadBalancerBackend { 
     name         : csv.backendName, 
-    ipv4Address  : csv.backendIpv4Address
+    ipv4Address  : csv.backendIPv4Address
 })
 CREATE (loadbalancer)-[:BALANCES_TO]->(backend)
 ;
@@ -63,7 +63,7 @@ FROM "file:///apache_services.csv" as csv
 MERGE (apache_service:ApacheService { 
     fqdn : csv.fqdn
 })
-CREATE (ip:Ipv4Address { 
+CREATE (ip:IPv4Address { 
     address  : csv.ipv4Address
 })
 CREATE (apache_service)-[:BOUND_TO]->(ip)
@@ -75,19 +75,19 @@ CREATE (apache_service)-[:BOUND_TO]->(ip)
 MATCH (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
 WHERE
-  lb.virtualIpv4Address = dnsValue.value
+  lb.virtualIPv4Address = dnsValue.value
 MERGE (dns)-[l1:LINKED_TO]->(lb)
 ;
 
 MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[hr:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (host:Host)-[hr:HAS_ADDRESS]->(ip:IPv4Address)
 WHERE
   ip.address = lbb.ipv4Address
 MERGE (lbb)-[l2:LINKED_TO]->(host)
 ;
 
 MATCH (lb:LoadBalancer)-[lbr:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (as:ApacheService)-[bd:BOUND_TO]->(aip:Ipv4Address)
+MATCH (as:ApacheService)-[bd:BOUND_TO]->(aip:IPv4Address)
 WHERE
   lbb.ipv4Address = aip.address
 MERGE (lbb)-[l3:LINKED_TO]->(as)

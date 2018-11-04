@@ -1,4 +1,4 @@
-name,virtualIpv4Address,backendName,backendIpv4Address
+name,virtualIPv4Address,backendName,backendIpv4Address
 farmxxx,1.0.3.0,primary,10.0.3.0
 farmxxx,1.0.3.0,secondary,10.0.3.1
 farmxxx,1.0.3.0,ternary,10.0.3.2

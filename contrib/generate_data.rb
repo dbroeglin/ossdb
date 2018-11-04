@@ -31,7 +31,7 @@ open('Sources/Hosts/hosts_ips.csv', 'w') { |f|
 }
 
 open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
-    f.puts "name,virtualIpv4Address,backendName,backendIpv4Address"
+    f.puts "name,virtualIPv4Address,backendName,backendIpv4Address"
     f.puts "farmxxx,1.0.3.0,primary,10.0.3.0"
     f.puts "farmxxx,1.0.3.0,secondary,10.0.3.1"
     f.puts "farmxxx,1.0.3.0,ternary,10.0.3.2"
@@ -47,13 +47,27 @@ open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
 
 open('Sources/DNS/dns_records.csv', 'w') { |f|
     f.puts "zoneName,recName,recType,recValue"
-    f.puts "foo.com,www,A,1.0.3.0"
-    f.puts "bar.com,www,A,1.0.4.0"
+    f.puts "foo.com,www,A,100.0.3.0"
+    f.puts "bar.com,www,A,100.0.4.0"
     f.puts "foobar.com,www,CNAME,www.bar.com"
     SIZE.times { |i|
         k = i * 2
-        f.puts "foo%03d.com,www,A,1.0.1.%d" % [i, k]
-        f.puts "bar%03d.com,www,A,1.0.2.%d" % [i, k]
+        f.puts "foo%03d.com,www,A,100.0.1.%d" % [i, k]
+        f.puts "bar%03d.com,www,A,100.0.2.%d" % [i, k]
+    }
+}
+
+open('Sources/LinkLoadBalancers/link_load_balancer.csv', 'w') { |f|
+    f.puts "node,type,inRangeLow,inRangeHigh,routerIP,outRangeLow,outRangeHigh,FQDN"
+    f.puts "llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com"
+    f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com"
+    f.puts "lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com"
+    # f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.3.254,100.0.4.0,100.0.4.0,www.bar.com"
+    SIZE.times { |i|
+        f.puts "llba,static,1.0.3.%d,1.0.3.%d,100.0.3.254,100.0.3.%d,100.0.3.%d,www.foo%03d.com" % [i, i, i, i, i]
+        f.puts "llbb,static,1.0.3.%d,1.0.3.%d,100.0.3.254,100.0.3.%d,100.0.3.%d,www.foo%03d.com" % [i, i, i, i, i]
+        f.puts "llba,static,1.0.2.%d,1.0.2.%d,100.0.2.254,100.0.2.%d,100.0.2.%d,www.bar%03d.com" % [i, i, i, i, i]
+        f.puts "llbb,static,1.0.2.%d,1.0.2.%d,100.0.2.254,100.0.2.%d,100.0.2.%d,www.bar%03d.com" % [i, i, i, i, i]
     }
 }
 

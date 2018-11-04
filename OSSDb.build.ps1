@@ -1,3 +1,7 @@
+Param(
+    [String]
+    $SourcesPath = "$PSScriptRoot\Sources"
+)
 . $PSScriptRoot\Connect.ps1
 
 Task Reload CleanDatabase, Import
@@ -26,7 +30,7 @@ Task CleanDatabase {
 }
 
 Task PrepareImports -Partial -Inputs {
-    Get-ChildItem -Recurse $PSScriptRoot\Sources -File
+    Get-ChildItem -Recurse $SourcesPath -File
 } -Outputs { 
     process { 
         Join-Path $Neo4jImportPath (Split-Path $_ -Leaf)

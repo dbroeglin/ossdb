@@ -17,13 +17,13 @@ RETURN DISTINCT
 MATCH (zone:DNSZone)-->
       (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:IPv4Address)
 WHERE
-  lb.virtualIpv4Address = dnsValue.value
+  lb.virtualIPv4Address = dnsValue.value
   AND ip.address        = lbb.ipv4Address
 RETURN
   dns.name + '.' + zone.name as dnsName,
-  lb.virtualIpv4Address AS ip,
+  lb.virtualIPv4Address AS ip,
   collect(host.name) AS hostnames
 ORDER BY dnsName
 
@@ -32,13 +32,13 @@ ORDER BY dnsName
 MATCH (zone:DNSZone{name: 'foo.com'})-->
       (dns:DNSRecordName{name: 'www'})-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:IPv4Address)
 WHERE
-  lb.virtualIpv4Address = dnsValue.value
+  lb.virtualIPv4Address = dnsValue.value
   AND ip.address = lbb.ipv4Address
 RETURN
   dns.name + '.' + zone.name as dnsName,
-  lb.virtualIpv4Address      as ip,
+  lb.virtualIPv4Address      as ip,
   collect(host.name)         as hostnames
 ;
 
@@ -47,12 +47,12 @@ RETURN
 MATCH (zone:DNSZone{name: 'foo.com'})-->
       (dns:DNSRecordName{name: 'www'})-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:IPv4Address)
 MATCH (dns)-->(lb)
 MATCH (lbb)-->(host)
 RETURN
   dns.name + '.' + zone.name as dnsName,
-  lb.virtualIpv4Address      as ip,
+  lb.virtualIPv4Address      as ip,
   collect(host.name)         as hostnames
 ;
 
@@ -61,15 +61,15 @@ RETURN
 MATCH (zone:DNSZone)-->
       (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:IPv4Address)
 WHERE
-  lb.virtualIpv4Address = dnsValue.value
+  lb.virtualIPv4Address = dnsValue.value
   AND ip.address = lbb.ipv4Address
 WITH zone, dns, lb, collect(host.name) AS hostnames
 WHERE any(hostname IN hostnames WHERE hostname = 'jeexxx01')
 RETURN
   dns.name + '.' + zone.name as dnsName,
-  lb.virtualIpv4Address      as ip,
+  lb.virtualIPv4Address      as ip,
   hostnames
 ;
 
@@ -78,13 +78,19 @@ RETURN
 MATCH (zone:DNSZone)-->
       (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:IPv4Address)
 MATCH (dns)-->(lb)
 MATCH (lbb)-->(host)
 WITH zone, dns, lb, collect(host.name) AS hostnames
 WHERE any(hostname IN hostnames WHERE hostname = 'jeexxx01')
 RETURN
   dns.name + '.' + zone.name as dnsName,
-  lb.virtualIpv4Address      as ip,
+  lb.virtualIPv4Address      as ip,
   hostnames
 ;
+
+// Find all link load balancer NAT configurations
+
+MATCH (i:IPv4Address)<-[*]-(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
+      (oRange)-->(o:IPv4Address) 
+RETURN nat, i, iRange, o, oRange
