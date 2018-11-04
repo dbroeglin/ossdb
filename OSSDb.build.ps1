@@ -12,7 +12,7 @@ Task Import PrepareImports, {
     ForEach-Object {
         Write-Information "Processing reload script $_..."
         (Get-Content -Raw $_) -split ';' |
-        Where-Object { -not [String]::IsNullOrWhiteSpace($_) } |
+        Where-Object { -not [String]::IsNullOrWhiteSpace(($_ -replace '//.*', '')) } |
         ForEach-Object {
             Write-Verbose "Processing reload command:`n$_"
             $Session.Run($_)
