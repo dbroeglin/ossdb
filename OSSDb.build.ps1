@@ -1,8 +1,6 @@
-$Neo4jVersion = "3.4.5"
-$ImportPath = "/usr/local/Cellar/neo4j/$Neo4jVersion/libexec/import/"
-New-Item $ImportPath -Force -Type Container > $Null
-
 . $PSScriptRoot\Connect.ps1
+
+New-Item $Neo4jImportPath -Force -Type Container > $Null
 
 Task Import PrepareImports, {
     Get-ChildItem -Recurse $PSScriptRoot\Sources -Include Reload.cypher | ForEach-Object {
@@ -15,7 +13,7 @@ Task Import PrepareImports, {
 }
 
 Task Clean {
-    Get-ChildItem $ImportPath -Recurse -Include '*.csv' | Remove-Item -Force
+    Get-ChildItem $Neo4jImportPath -Recurse -Include '*.csv' | Remove-Item -Force
 }
 
 Task CleanDatabase {
@@ -28,7 +26,7 @@ Task PrepareImports -Partial -Inputs {
     Get-ChildItem -Recurse $PSScriptRoot\Sources -File
 } -Outputs { 
     process { 
-        Join-Path $ImportPath (Split-Path $_ -Leaf)
+        Join-Path $Neo4jImportPath (Split-Path $_ -Leaf)
     }
 } {
     process {

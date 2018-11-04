@@ -1,1 +1,5 @@
 .DS_Store
+
+# Ignore local configuration file
+# it can be initialized from Config.sample.ps1
+Config.ps1
