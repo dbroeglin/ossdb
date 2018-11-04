@@ -53,7 +53,7 @@ open('Sources/DNS/dns_records.csv', 'w') { |f|
     SIZE.times { |i|
         k = i * 2
         f.puts "foo%03d.com,www,A,1.0.1.%d" % [i, k]
-        f.puts "bar%03d.com,www.,A,1.0.2.%d" % [i, k]
+        f.puts "bar%03d.com,www,A,1.0.2.%d" % [i, k]
     }
 }
 

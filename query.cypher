@@ -1,19 +1,3 @@
-
-// List all DNS names, load balancer and host list
-
-MATCH (dns:DNSRecordName)-[dr:CONTAINS]->(dnsValue:DNSRecordValue) 
-MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
-MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
-WHERE 
-    lb.virtualIpv4Address = dnsValue.value 
-    AND dns.type = "A"
-    AND ip.address = lbb.ipv4Address
-RETURN 
-    dns.name as dnsName, 
-    lb.virtualIpv4Address AS ip, 
-    collect(host.name) AS hostnames
-ORDER BY dnsName;
-
 // Graph statistics
 
 MATCH (n) 
@@ -27,6 +11,20 @@ RETURN
     min(size( (n)-[]-() ) ) as Min_RelationshipCount,
     max(size( (n)-[]-() ) ) as Max_RelationshipCount
 ;
+
+// List all DNS names, load balancer and host list
+
+MATCH (zone:DNSZone)-->(dns:DNSRecordName)-[dr:HAS_VALUE { type: "A" }]->(dnsValue:DNSRecordValue) 
+MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)
+MATCH (host:Host)-[:HAS_ADDRESS]->(ip:Ipv4Address)
+WHERE 
+    lb.virtualIpv4Address = dnsValue.value 
+    AND ip.address = lbb.ipv4Address
+RETURN
+    dns.name + '.' + zone.name as dnsName, 
+    lb.virtualIpv4Address AS ip, 
+    collect(host.name) AS hostnames
+ORDER BY dnsName
 
 // Find a subgraph with DNS name www.foo.com
 
