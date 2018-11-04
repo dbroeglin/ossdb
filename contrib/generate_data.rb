@@ -1,6 +1,6 @@
-SIZE = 1000
+SIZE = 25
 
-open('data/hosts.csv', 'w') { |f|
+open('Sources/Hosts/hosts.csv', 'w') { |f|
     f.puts "name,memory,cores"
     f.puts "jeexxx01,2048,4"
     f.puts "jeexxx02,2048,4"
@@ -15,7 +15,7 @@ open('data/hosts.csv', 'w') { |f|
     }
 }
 
-open('data/hosts_ips.csv', 'w') { |f|
+open('Sources/Hosts/hosts_ips.csv', 'w') { |f|
     f.puts "name,ipv4Address"
     f.puts "jeexxx01,10.0.3.0"
     f.puts "jeexxx02,10.0.3.1"
@@ -30,7 +30,7 @@ open('data/hosts_ips.csv', 'w') { |f|
     }
 }
 
-open('data/load_balancers.csv', 'w') { |f|
+open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
     f.puts "name,virtualIpv4Address,backendName,backendIpv4Address"
     f.puts "farmxxx,1.0.3.0,primary,10.0.3.0"
     f.puts "farmxxx,1.0.3.0,secondary,10.0.3.1"
@@ -45,19 +45,19 @@ open('data/load_balancers.csv', 'w') { |f|
     }
 }
 
-open('data/dns_records.csv', 'w') { |f|
-    f.puts "name,type,value"
-    f.puts "www.foo.com,A,1.0.3.0"
-    f.puts "www.bar.com,A,1.0.4.0"
-    f.puts "www.foobar.com,CNAME,www.bar.com"
+open('Sources/DNS/dns_records.csv', 'w') { |f|
+    f.puts "zoneName,recName,recType,recValue"
+    f.puts "foo.com,www,A,1.0.3.0"
+    f.puts "bar.com,www,A,1.0.4.0"
+    f.puts "foobar.com,www,CNAME,www.bar.com"
     SIZE.times { |i|
         k = i * 2
-        f.puts "www.foo%03d.com,A,1.0.1.%d" % [i, k]
-        f.puts "www.bar%03d.com,A,1.0.2.%d" % [i, k]
+        f.puts "foo%03d.com,www,A,1.0.1.%d" % [i, k]
+        f.puts "bar%03d.com,www.,A,1.0.2.%d" % [i, k]
     }
 }
 
-open('data/apache_services.csv', 'w') { |f|
+open('Sources/Apache/apache_services.csv', 'w') { |f|
     f.puts "fqdn,ipv4Address"
     f.puts "www.foo.com,10.0.3.0"
     f.puts "www.foo.com,10.0.3.1"
