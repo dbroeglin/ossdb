@@ -91,10 +91,11 @@ RETURN
 
 // Find all link load balancer NAT configurations for foo.com
 
-MATCH (i:IPv4Address)<-[*]-(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
-      (oRange)-->(o:IPv4Address) 
+MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
+      (oRange)-->(o:IPv4Address)
+MATCH (nat)-[:HAS_FQDN]->(fqdn:LinkLoadBalancerFQDN)
 WHERE 'foo.com' IN nat.fqdn
-RETURN nat, i, iRange, o, oRange
+RETURN nat, i, iRange, o, oRange, fqdn
 ;
 
 // Find load balancer for "Foo"
@@ -103,3 +104,12 @@ MATCH (lb:LoadBalancer{name: 'Foo'})-->(lbb:LoadBalancerBackend)-[:HAS_ADDRESS]-
 MATCH (lb)-[:VIP]->(vip:IPv4Address)
 RETURN lb, lbb, bip, vip
 ;
+
+// Find Apache config for FOO
+
+MATCH (instance:ApacheInstance {name: 'FOO'})-->(service:ApacheService)-->
+      (vhost:ApacheVirtualHost)
+MATCH (node:Node)-[:CONTAINS]->(instance)
+MATCH (service)-[:HAS_ADDRESS]->(vip:IPv4Address)
+MATCH (vhost)-[:HAS_FQDN]->(fqdn:ApacheFQDN)
+RETURN instance, service, vhost, node, vip, fqdn

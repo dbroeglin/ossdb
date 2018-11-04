@@ -20,30 +20,10 @@ FROM "file:///hosts_ips.csv" as csv
 MATCH(host:Host { 
     name : csv.name
 }) 
-CREATE (ip:IPv4Address { 
+MERGE (ip:IPv4Address { 
     address  : csv.ipv4Address
 })
 CREATE (host)-[:HAS_ADDRESS]->(ip)
-;
-
-CREATE INDEX ON :IPv4Address(address);
-
-//
-// Apache Services
-//
-
-CREATE INDEX ON :ApacheService(fqdn);
-
-USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS 
-FROM "file:///apache_services.csv" as csv
-MERGE (apache_service:ApacheService { 
-    fqdn : csv.fqdn
-})
-CREATE (ip:IPv4Address { 
-    address  : csv.ipv4Address
-})
-CREATE (apache_service)-[:BOUND_TO]->(ip)
 ;
 
 

@@ -1,105 +1,107 @@
-fqdn,ipv4Address
-www.foo.com,10.0.3.0
-www.foo.com,10.0.3.1
-www.foo.com,10.0.3.2
-www.foo.com,10.0.3.3
-www.foo000.com,10.0.1.0
-www.foo000.com,10.0.2.0
-www.bar000.com,10.100.10.0
-www.bar000.com,10.100.11.0
-www.foo001.com,10.0.1.1
-www.foo001.com,10.0.2.1
-www.bar001.com,10.100.10.1
-www.bar001.com,10.100.11.1
-www.foo002.com,10.0.1.2
-www.foo002.com,10.0.2.2
-www.bar002.com,10.100.10.2
-www.bar002.com,10.100.11.2
-www.foo003.com,10.0.1.3
-www.foo003.com,10.0.2.3
-www.bar003.com,10.100.10.3
-www.bar003.com,10.100.11.3
-www.foo004.com,10.0.1.4
-www.foo004.com,10.0.2.4
-www.bar004.com,10.100.10.4
-www.bar004.com,10.100.11.4
-www.foo005.com,10.0.1.5
-www.foo005.com,10.0.2.5
-www.bar005.com,10.100.10.5
-www.bar005.com,10.100.11.5
-www.foo006.com,10.0.1.6
-www.foo006.com,10.0.2.6
-www.bar006.com,10.100.10.6
-www.bar006.com,10.100.11.6
-www.foo007.com,10.0.1.7
-www.foo007.com,10.0.2.7
-www.bar007.com,10.100.10.7
-www.bar007.com,10.100.11.7
-www.foo008.com,10.0.1.8
-www.foo008.com,10.0.2.8
-www.bar008.com,10.100.10.8
-www.bar008.com,10.100.11.8
-www.foo009.com,10.0.1.9
-www.foo009.com,10.0.2.9
-www.bar009.com,10.100.10.9
-www.bar009.com,10.100.11.9
-www.foo010.com,10.0.1.10
-www.foo010.com,10.0.2.10
-www.bar010.com,10.100.10.10
-www.bar010.com,10.100.11.10
-www.foo011.com,10.0.1.11
-www.foo011.com,10.0.2.11
-www.bar011.com,10.100.10.11
-www.bar011.com,10.100.11.11
-www.foo012.com,10.0.1.12
-www.foo012.com,10.0.2.12
-www.bar012.com,10.100.10.12
-www.bar012.com,10.100.11.12
-www.foo013.com,10.0.1.13
-www.foo013.com,10.0.2.13
-www.bar013.com,10.100.10.13
-www.bar013.com,10.100.11.13
-www.foo014.com,10.0.1.14
-www.foo014.com,10.0.2.14
-www.bar014.com,10.100.10.14
-www.bar014.com,10.100.11.14
-www.foo015.com,10.0.1.15
-www.foo015.com,10.0.2.15
-www.bar015.com,10.100.10.15
-www.bar015.com,10.100.11.15
-www.foo016.com,10.0.1.16
-www.foo016.com,10.0.2.16
-www.bar016.com,10.100.10.16
-www.bar016.com,10.100.11.16
-www.foo017.com,10.0.1.17
-www.foo017.com,10.0.2.17
-www.bar017.com,10.100.10.17
-www.bar017.com,10.100.11.17
-www.foo018.com,10.0.1.18
-www.foo018.com,10.0.2.18
-www.bar018.com,10.100.10.18
-www.bar018.com,10.100.11.18
-www.foo019.com,10.0.1.19
-www.foo019.com,10.0.2.19
-www.bar019.com,10.100.10.19
-www.bar019.com,10.100.11.19
-www.foo020.com,10.0.1.20
-www.foo020.com,10.0.2.20
-www.bar020.com,10.100.10.20
-www.bar020.com,10.100.11.20
-www.foo021.com,10.0.1.21
-www.foo021.com,10.0.2.21
-www.bar021.com,10.100.10.21
-www.bar021.com,10.100.11.21
-www.foo022.com,10.0.1.22
-www.foo022.com,10.0.2.22
-www.bar022.com,10.100.10.22
-www.bar022.com,10.100.11.22
-www.foo023.com,10.0.1.23
-www.foo023.com,10.0.2.23
-www.bar023.com,10.100.10.23
-www.bar023.com,10.100.11.23
-www.foo024.com,10.0.1.24
-www.foo024.com,10.0.2.24
-www.bar024.com,10.100.10.24
-www.bar024.com,10.100.11.24
+itEnv,name,service_description,hostname,service_ip,vhost_fqdn,vhost_aliases,worker,backend_hostname,backend_port
+PRD,FOO,FOOCOM,apache1.local,10.0.3.0,www.foo.com,"foo.com,foo.io",WRK1,foo-a,20.0.3.0
+PRD,FOO,FOOCOM,apache2.local,10.0.3.1,www.foo.com,"foo.com,foo.io",WRK1,foo-b,20.0.3.1
+PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-c,20.0.3.2
+PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-d,20.0.4.2
+PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-e,20.0.3.3
+PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-f,20.0.4.3
+PRD,FOO0,FOOCOM 0,apache1.local,10.0.1.0,www.foo000.com,,WRK1,foo-a,20.0.1.0
+PRD,FOO0,FOOCOM 0,apache1.local,10.0.1.0,www.foo000.com,,WRK1,foo-b,20.0.2.0
+PRD,FOO0,FOOCOM 0,apache2.local,10.0.2.0,www.foo000.com,,WRK1,foo-a,20.0.1.0
+PRD,FOO0,FOOCOM 0,apache2.local,10.0.2.0,www.foo000.com,,WRK1,foo-b,20.0.2.0
+PRD,FOO0,FOOCOM 1,apache1.local,10.0.1.1,www.foo001.com,,WRK1,foo-a,20.0.1.1
+PRD,FOO0,FOOCOM 1,apache1.local,10.0.1.1,www.foo001.com,,WRK1,foo-b,20.0.2.1
+PRD,FOO0,FOOCOM 1,apache2.local,10.0.2.1,www.foo001.com,,WRK1,foo-a,20.0.1.1
+PRD,FOO0,FOOCOM 1,apache2.local,10.0.2.1,www.foo001.com,,WRK1,foo-b,20.0.2.1
+PRD,FOO0,FOOCOM 2,apache1.local,10.0.1.2,www.foo002.com,,WRK1,foo-a,20.0.1.2
+PRD,FOO0,FOOCOM 2,apache1.local,10.0.1.2,www.foo002.com,,WRK1,foo-b,20.0.2.2
+PRD,FOO0,FOOCOM 2,apache2.local,10.0.2.2,www.foo002.com,,WRK1,foo-a,20.0.1.2
+PRD,FOO0,FOOCOM 2,apache2.local,10.0.2.2,www.foo002.com,,WRK1,foo-b,20.0.2.2
+PRD,FOO0,FOOCOM 3,apache1.local,10.0.1.3,www.foo003.com,,WRK1,foo-a,20.0.1.3
+PRD,FOO0,FOOCOM 3,apache1.local,10.0.1.3,www.foo003.com,,WRK1,foo-b,20.0.2.3
+PRD,FOO0,FOOCOM 3,apache2.local,10.0.2.3,www.foo003.com,,WRK1,foo-a,20.0.1.3
+PRD,FOO0,FOOCOM 3,apache2.local,10.0.2.3,www.foo003.com,,WRK1,foo-b,20.0.2.3
+PRD,FOO0,FOOCOM 4,apache1.local,10.0.1.4,www.foo004.com,,WRK1,foo-a,20.0.1.4
+PRD,FOO0,FOOCOM 4,apache1.local,10.0.1.4,www.foo004.com,,WRK1,foo-b,20.0.2.4
+PRD,FOO0,FOOCOM 4,apache2.local,10.0.2.4,www.foo004.com,,WRK1,foo-a,20.0.1.4
+PRD,FOO0,FOOCOM 4,apache2.local,10.0.2.4,www.foo004.com,,WRK1,foo-b,20.0.2.4
+PRD,FOO0,FOOCOM 5,apache1.local,10.0.1.5,www.foo005.com,,WRK1,foo-a,20.0.1.5
+PRD,FOO0,FOOCOM 5,apache1.local,10.0.1.5,www.foo005.com,,WRK1,foo-b,20.0.2.5
+PRD,FOO0,FOOCOM 5,apache2.local,10.0.2.5,www.foo005.com,,WRK1,foo-a,20.0.1.5
+PRD,FOO0,FOOCOM 5,apache2.local,10.0.2.5,www.foo005.com,,WRK1,foo-b,20.0.2.5
+PRD,FOO0,FOOCOM 6,apache1.local,10.0.1.6,www.foo006.com,,WRK1,foo-a,20.0.1.6
+PRD,FOO0,FOOCOM 6,apache1.local,10.0.1.6,www.foo006.com,,WRK1,foo-b,20.0.2.6
+PRD,FOO0,FOOCOM 6,apache2.local,10.0.2.6,www.foo006.com,,WRK1,foo-a,20.0.1.6
+PRD,FOO0,FOOCOM 6,apache2.local,10.0.2.6,www.foo006.com,,WRK1,foo-b,20.0.2.6
+PRD,FOO0,FOOCOM 7,apache1.local,10.0.1.7,www.foo007.com,,WRK1,foo-a,20.0.1.7
+PRD,FOO0,FOOCOM 7,apache1.local,10.0.1.7,www.foo007.com,,WRK1,foo-b,20.0.2.7
+PRD,FOO0,FOOCOM 7,apache2.local,10.0.2.7,www.foo007.com,,WRK1,foo-a,20.0.1.7
+PRD,FOO0,FOOCOM 7,apache2.local,10.0.2.7,www.foo007.com,,WRK1,foo-b,20.0.2.7
+PRD,FOO1,FOOCOM 8,apache1.local,10.0.1.8,www.foo008.com,,WRK1,foo-a,20.0.1.8
+PRD,FOO1,FOOCOM 8,apache1.local,10.0.1.8,www.foo008.com,,WRK1,foo-b,20.0.2.8
+PRD,FOO1,FOOCOM 8,apache2.local,10.0.2.8,www.foo008.com,,WRK1,foo-a,20.0.1.8
+PRD,FOO1,FOOCOM 8,apache2.local,10.0.2.8,www.foo008.com,,WRK1,foo-b,20.0.2.8
+PRD,FOO1,FOOCOM 9,apache1.local,10.0.1.9,www.foo009.com,,WRK1,foo-a,20.0.1.9
+PRD,FOO1,FOOCOM 9,apache1.local,10.0.1.9,www.foo009.com,,WRK1,foo-b,20.0.2.9
+PRD,FOO1,FOOCOM 9,apache2.local,10.0.2.9,www.foo009.com,,WRK1,foo-a,20.0.1.9
+PRD,FOO1,FOOCOM 9,apache2.local,10.0.2.9,www.foo009.com,,WRK1,foo-b,20.0.2.9
+PRD,FOO1,FOOCOM 10,apache1.local,10.0.1.10,www.foo010.com,,WRK1,foo-a,20.0.1.10
+PRD,FOO1,FOOCOM 10,apache1.local,10.0.1.10,www.foo010.com,,WRK1,foo-b,20.0.2.10
+PRD,FOO1,FOOCOM 10,apache2.local,10.0.2.10,www.foo010.com,,WRK1,foo-a,20.0.1.10
+PRD,FOO1,FOOCOM 10,apache2.local,10.0.2.10,www.foo010.com,,WRK1,foo-b,20.0.2.10
+PRD,FOO1,FOOCOM 11,apache1.local,10.0.1.11,www.foo011.com,,WRK1,foo-a,20.0.1.11
+PRD,FOO1,FOOCOM 11,apache1.local,10.0.1.11,www.foo011.com,,WRK1,foo-b,20.0.2.11
+PRD,FOO1,FOOCOM 11,apache2.local,10.0.2.11,www.foo011.com,,WRK1,foo-a,20.0.1.11
+PRD,FOO1,FOOCOM 11,apache2.local,10.0.2.11,www.foo011.com,,WRK1,foo-b,20.0.2.11
+PRD,FOO1,FOOCOM 12,apache1.local,10.0.1.12,www.foo012.com,,WRK1,foo-a,20.0.1.12
+PRD,FOO1,FOOCOM 12,apache1.local,10.0.1.12,www.foo012.com,,WRK1,foo-b,20.0.2.12
+PRD,FOO1,FOOCOM 12,apache2.local,10.0.2.12,www.foo012.com,,WRK1,foo-a,20.0.1.12
+PRD,FOO1,FOOCOM 12,apache2.local,10.0.2.12,www.foo012.com,,WRK1,foo-b,20.0.2.12
+PRD,FOO1,FOOCOM 13,apache1.local,10.0.1.13,www.foo013.com,,WRK1,foo-a,20.0.1.13
+PRD,FOO1,FOOCOM 13,apache1.local,10.0.1.13,www.foo013.com,,WRK1,foo-b,20.0.2.13
+PRD,FOO1,FOOCOM 13,apache2.local,10.0.2.13,www.foo013.com,,WRK1,foo-a,20.0.1.13
+PRD,FOO1,FOOCOM 13,apache2.local,10.0.2.13,www.foo013.com,,WRK1,foo-b,20.0.2.13
+PRD,FOO1,FOOCOM 14,apache1.local,10.0.1.14,www.foo014.com,,WRK1,foo-a,20.0.1.14
+PRD,FOO1,FOOCOM 14,apache1.local,10.0.1.14,www.foo014.com,,WRK1,foo-b,20.0.2.14
+PRD,FOO1,FOOCOM 14,apache2.local,10.0.2.14,www.foo014.com,,WRK1,foo-a,20.0.1.14
+PRD,FOO1,FOOCOM 14,apache2.local,10.0.2.14,www.foo014.com,,WRK1,foo-b,20.0.2.14
+PRD,FOO1,FOOCOM 15,apache1.local,10.0.1.15,www.foo015.com,,WRK1,foo-a,20.0.1.15
+PRD,FOO1,FOOCOM 15,apache1.local,10.0.1.15,www.foo015.com,,WRK1,foo-b,20.0.2.15
+PRD,FOO1,FOOCOM 15,apache2.local,10.0.2.15,www.foo015.com,,WRK1,foo-a,20.0.1.15
+PRD,FOO1,FOOCOM 15,apache2.local,10.0.2.15,www.foo015.com,,WRK1,foo-b,20.0.2.15
+PRD,FOO2,FOOCOM 16,apache1.local,10.0.1.16,www.foo016.com,,WRK1,foo-a,20.0.1.16
+PRD,FOO2,FOOCOM 16,apache1.local,10.0.1.16,www.foo016.com,,WRK1,foo-b,20.0.2.16
+PRD,FOO2,FOOCOM 16,apache2.local,10.0.2.16,www.foo016.com,,WRK1,foo-a,20.0.1.16
+PRD,FOO2,FOOCOM 16,apache2.local,10.0.2.16,www.foo016.com,,WRK1,foo-b,20.0.2.16
+PRD,FOO2,FOOCOM 17,apache1.local,10.0.1.17,www.foo017.com,,WRK1,foo-a,20.0.1.17
+PRD,FOO2,FOOCOM 17,apache1.local,10.0.1.17,www.foo017.com,,WRK1,foo-b,20.0.2.17
+PRD,FOO2,FOOCOM 17,apache2.local,10.0.2.17,www.foo017.com,,WRK1,foo-a,20.0.1.17
+PRD,FOO2,FOOCOM 17,apache2.local,10.0.2.17,www.foo017.com,,WRK1,foo-b,20.0.2.17
+PRD,FOO2,FOOCOM 18,apache1.local,10.0.1.18,www.foo018.com,,WRK1,foo-a,20.0.1.18
+PRD,FOO2,FOOCOM 18,apache1.local,10.0.1.18,www.foo018.com,,WRK1,foo-b,20.0.2.18
+PRD,FOO2,FOOCOM 18,apache2.local,10.0.2.18,www.foo018.com,,WRK1,foo-a,20.0.1.18
+PRD,FOO2,FOOCOM 18,apache2.local,10.0.2.18,www.foo018.com,,WRK1,foo-b,20.0.2.18
+PRD,FOO2,FOOCOM 19,apache1.local,10.0.1.19,www.foo019.com,,WRK1,foo-a,20.0.1.19
+PRD,FOO2,FOOCOM 19,apache1.local,10.0.1.19,www.foo019.com,,WRK1,foo-b,20.0.2.19
+PRD,FOO2,FOOCOM 19,apache2.local,10.0.2.19,www.foo019.com,,WRK1,foo-a,20.0.1.19
+PRD,FOO2,FOOCOM 19,apache2.local,10.0.2.19,www.foo019.com,,WRK1,foo-b,20.0.2.19
+PRD,FOO2,FOOCOM 20,apache1.local,10.0.1.20,www.foo020.com,,WRK1,foo-a,20.0.1.20
+PRD,FOO2,FOOCOM 20,apache1.local,10.0.1.20,www.foo020.com,,WRK1,foo-b,20.0.2.20
+PRD,FOO2,FOOCOM 20,apache2.local,10.0.2.20,www.foo020.com,,WRK1,foo-a,20.0.1.20
+PRD,FOO2,FOOCOM 20,apache2.local,10.0.2.20,www.foo020.com,,WRK1,foo-b,20.0.2.20
+PRD,FOO2,FOOCOM 21,apache1.local,10.0.1.21,www.foo021.com,,WRK1,foo-a,20.0.1.21
+PRD,FOO2,FOOCOM 21,apache1.local,10.0.1.21,www.foo021.com,,WRK1,foo-b,20.0.2.21
+PRD,FOO2,FOOCOM 21,apache2.local,10.0.2.21,www.foo021.com,,WRK1,foo-a,20.0.1.21
+PRD,FOO2,FOOCOM 21,apache2.local,10.0.2.21,www.foo021.com,,WRK1,foo-b,20.0.2.21
+PRD,FOO2,FOOCOM 22,apache1.local,10.0.1.22,www.foo022.com,,WRK1,foo-a,20.0.1.22
+PRD,FOO2,FOOCOM 22,apache1.local,10.0.1.22,www.foo022.com,,WRK1,foo-b,20.0.2.22
+PRD,FOO2,FOOCOM 22,apache2.local,10.0.2.22,www.foo022.com,,WRK1,foo-a,20.0.1.22
+PRD,FOO2,FOOCOM 22,apache2.local,10.0.2.22,www.foo022.com,,WRK1,foo-b,20.0.2.22
+PRD,FOO2,FOOCOM 23,apache1.local,10.0.1.23,www.foo023.com,,WRK1,foo-a,20.0.1.23
+PRD,FOO2,FOOCOM 23,apache1.local,10.0.1.23,www.foo023.com,,WRK1,foo-b,20.0.2.23
+PRD,FOO2,FOOCOM 23,apache2.local,10.0.2.23,www.foo023.com,,WRK1,foo-a,20.0.1.23
+PRD,FOO2,FOOCOM 23,apache2.local,10.0.2.23,www.foo023.com,,WRK1,foo-b,20.0.2.23
+PRD,FOO3,FOOCOM 24,apache1.local,10.0.1.24,www.foo024.com,,WRK1,foo-a,20.0.1.24
+PRD,FOO3,FOOCOM 24,apache1.local,10.0.1.24,www.foo024.com,,WRK1,foo-b,20.0.2.24
+PRD,FOO3,FOOCOM 24,apache2.local,10.0.2.24,www.foo024.com,,WRK1,foo-a,20.0.1.24
+PRD,FOO3,FOOCOM 24,apache2.local,10.0.2.24,www.foo024.com,,WRK1,foo-b,20.0.2.24

@@ -30,21 +30,6 @@ open('Sources/Hosts/hosts_ips.csv', 'w') { |f|
     }
 }
 
-open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
-    f.puts "Name,VIP,NatIP,BackendIP,BackendName,BackendDescription"
-    f.puts "Foo,1.0.3.0,,10.0.3.0,primary,Foo primary"
-    f.puts "Foo,1.0.3.0,,10.0.3.1,secondary,Foo secondary"
-    f.puts "Foo,1.0.3.0,,10.0.3.2,ternary,Foo ternary"
-    f.puts "Foo,1.0.3.0,,10.0.3.3,quaternary,Foo quarternary"
-    SIZE.times { |i|
-        k = i * 2
-        f.puts "Foo %03d,1.0.3.%d,primary,10.0.1.%d" % [i, i, i]
-        f.puts "Foo %03d,1.0.3.%d,secondary,10.0.2.%d" % [i, i, i]
-        f.puts "Bar %03d,1.0.2.%d,primary,10.100.1.%d" % [i, i, i]
-        f.puts "Bar %03d,1.0.2.%d,secondary,10.100.2.%d" % [i, i, i]
-    }
-}
-
 open('Sources/DNS/dns_records.csv', 'w') { |f|
     f.puts "zoneName,recName,recType,recValue"
     f.puts "foo.com,www,A,100.0.3.0"
@@ -71,18 +56,34 @@ open('Sources/LinkLoadBalancers/link_load_balancer.csv', 'w') { |f|
     }
 }
 
-open('Sources/Apache/apache_services.csv', 'w') { |f|
-    f.puts "fqdn,ipv4Address"
-    f.puts "www.foo.com,10.0.3.0"
-    f.puts "www.foo.com,10.0.3.1"
-    f.puts "www.foo.com,10.0.3.2"
-    f.puts "www.foo.com,10.0.3.3"
+open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
+    f.puts "Name,VIP,NatIP,BackendIP,BackendName,BackendDescription"
+    f.puts "Foo,1.0.3.0,,10.0.3.0,primary,Foo primary"
+    f.puts "Foo,1.0.3.0,,10.0.3.1,secondary,Foo secondary"
+    f.puts "Foo,1.0.3.0,,10.0.3.2,ternary,Foo ternary"
+    f.puts "Foo,1.0.3.0,,10.0.3.3,quaternary,Foo quarternary"
     SIZE.times { |i|
-        f.puts "www.foo%03d.com,10.0.1.%d" % [i, i]
-        f.puts "www.foo%03d.com,10.0.2.%d" % [i, i]
-        
-        f.puts "www.bar%03d.com,10.100.10.%d" % [i, i]
-        f.puts "www.bar%03d.com,10.100.11.%d" % [i, i]
+        k = i * 2
+        f.puts "Foo %03d,1.0.3.%d,primary,10.0.1.%d" % [i, i, i]
+        f.puts "Foo %03d,1.0.3.%d,secondary,10.0.2.%d" % [i, i, i]
+        f.puts "Bar %03d,1.0.2.%d,primary,10.100.1.%d" % [i, i, i]
+        f.puts "Bar %03d,1.0.2.%d,secondary,10.100.2.%d" % [i, i, i]
+    }
+}
+
+open('Sources/Apache/apache_services.csv', 'w') { |f|
+    f.puts "itEnv,name,service_description,hostname,service_ip,vhost_fqdn,vhost_aliases,worker,backend_hostname,backend_port"
+    f.puts 'PRD,FOO,FOOCOM,apache1.local,10.0.3.0,www.foo.com,"foo.com,foo.io",WRK1,foo-a,20.0.3.0'
+    f.puts 'PRD,FOO,FOOCOM,apache2.local,10.0.3.1,www.foo.com,"foo.com,foo.io",WRK1,foo-b,20.0.3.1'
+    f.puts 'PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-c,20.0.3.2'
+    f.puts 'PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-d,20.0.4.2'
+    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-e,20.0.3.3'
+    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-f,20.0.4.3'
+    SIZE.times { |i|
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache1.local,10.0.1.%d,www.foo%03d.com,,WRK1,foo-a,20.0.1.%d' % [i / 8, i, i, i, i, i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache1.local,10.0.1.%d,www.foo%03d.com,,WRK1,foo-b,20.0.2.%d' % [i / 8, i, i, i, i, i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-a,20.0.1.%d' % [i / 8, i, i, i, i, i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-b,20.0.2.%d' % [i / 8, i, i, i, i, i]
     }
 }
 
