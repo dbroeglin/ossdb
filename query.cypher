@@ -89,8 +89,17 @@ RETURN
   hostnames
 ;
 
-// Find all link load balancer NAT configurations
+// Find all link load balancer NAT configurations for foo.com
 
 MATCH (i:IPv4Address)<-[*]-(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
       (oRange)-->(o:IPv4Address) 
+WHERE 'foo.com' IN nat.fqdn
 RETURN nat, i, iRange, o, oRange
+;
+
+// Find load balancer for "Foo"
+
+MATCH (lb:LoadBalancer{name: 'Foo'})-->(lbb:LoadBalancerBackend)-[:HAS_ADDRESS]->(bip:IPv4Address)
+MATCH (lb)-[:VIP]->(vip:IPv4Address)
+RETURN lb, lbb, bip, vip
+;

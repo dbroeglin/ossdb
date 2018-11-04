@@ -1,5 +1,5 @@
 //
-// DNS Records
+// Link load balancers
 //
 // Format: node,type,inRangeLow,inRangeHigh,routerIP,outRangeLow,outRangeHigh,FQDN
 //
@@ -37,5 +37,4 @@ MERGE  (outRangeHigh:  IPv4Address {
     address: llb.outRangeHigh
 })
 CREATE (outRange)-[:HIGH_ADDRESS]->(outRangeHigh)
-
 ;

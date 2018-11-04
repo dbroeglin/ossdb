@@ -28,29 +28,6 @@ CREATE (host)-[:HAS_ADDRESS]->(ip)
 
 CREATE INDEX ON :IPv4Address(address);
 
-
-
-//
-// Load balancers
-//
-
-CREATE INDEX ON :LoadBalancer(virtualIPv4Address);
-CREATE INDEX ON :LoadBalancerBackend(ipv4Address);
-
-USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS 
-FROM "file:///load_balancers.csv" as csv
-MERGE (loadbalancer:LoadBalancer { 
-    name : csv.name, 
-    virtualIPv4Address : csv.virtualIPv4Address 
-})
-CREATE (backend:LoadBalancerBackend { 
-    name         : csv.backendName, 
-    ipv4Address  : csv.backendIPv4Address
-})
-CREATE (loadbalancer)-[:BALANCES_TO]->(backend)
-;
-
 //
 // Apache Services
 //

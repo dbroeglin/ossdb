@@ -31,17 +31,17 @@ open('Sources/Hosts/hosts_ips.csv', 'w') { |f|
 }
 
 open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
-    f.puts "name,virtualIPv4Address,backendName,backendIpv4Address"
-    f.puts "farmxxx,1.0.3.0,primary,10.0.3.0"
-    f.puts "farmxxx,1.0.3.0,secondary,10.0.3.1"
-    f.puts "farmxxx,1.0.3.0,ternary,10.0.3.2"
-    f.puts "farmxxx,1.0.3.0,quaternary,10.0.3.3"
+    f.puts "Name,VIP,NatIP,BackendIP,BackendName,BackendDescription"
+    f.puts "Foo,1.0.3.0,,10.0.3.0,primary,Foo primary"
+    f.puts "Foo,1.0.3.0,,10.0.3.1,secondary,Foo secondary"
+    f.puts "Foo,1.0.3.0,,10.0.3.2,ternary,Foo ternary"
+    f.puts "Foo,1.0.3.0,,10.0.3.3,quaternary,Foo quarternary"
     SIZE.times { |i|
         k = i * 2
-        f.puts "farm%03d,1.0.1.%d,primary,10.0.1.%d" % [k, k, i]
-        f.puts "farm%03d,1.0.1.%d,secondary,10.0.2.%d" % [k, k, i]
-        f.puts "farm%03d,1.0.2.%d,primary,10.100.10.%d" % [k + 1, k, i]
-        f.puts "farm%03d,1.0.2.%d,secondary,10.100.11.%d" % [k + 1, k, i]
+        f.puts "Foo %03d,1.0.3.%d,primary,10.0.1.%d" % [i, i, i]
+        f.puts "Foo %03d,1.0.3.%d,secondary,10.0.2.%d" % [i, i, i]
+        f.puts "Bar %03d,1.0.2.%d,primary,10.100.1.%d" % [i, i, i]
+        f.puts "Bar %03d,1.0.2.%d,secondary,10.100.2.%d" % [i, i, i]
     }
 }
 
@@ -59,9 +59,9 @@ open('Sources/DNS/dns_records.csv', 'w') { |f|
 
 open('Sources/LinkLoadBalancers/link_load_balancer.csv', 'w') { |f|
     f.puts "node,type,inRangeLow,inRangeHigh,routerIP,outRangeLow,outRangeHigh,FQDN"
-    f.puts "llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com"
-    f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com"
-    f.puts "lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com"
+    f.puts "llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
+    f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com bar.com"
+    f.puts "lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
     # f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.3.254,100.0.4.0,100.0.4.0,www.bar.com"
     SIZE.times { |i|
         f.puts "llba,static,1.0.3.%d,1.0.3.%d,100.0.3.254,100.0.3.%d,100.0.3.%d,www.foo%03d.com" % [i, i, i, i, i]
