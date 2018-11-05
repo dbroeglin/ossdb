@@ -28,4 +28,6 @@ WITH vhost, SPLIT(csv.vhost_aliases, ",") AS fqdns
 UNWIND fqdns AS fqdn
 MERGE (apacheFQDN:ApacheFQDN {fqdn: fqdn})
 MERGE (vhost)-[:HAS_FQDN {isAlias: true}]->(apacheFQDN)
+
+// TODO: backends
 ;

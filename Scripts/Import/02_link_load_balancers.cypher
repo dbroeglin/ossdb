@@ -17,7 +17,8 @@ MERGE (node:Node {
 CREATE (nat:LinkLoadBalancerNat { 
     fqdn: SPLIT(csv.FQDN, " "),
     routerIP: csv.routerIP,
-    node: csv.node
+    node: csv.node,
+    type: csv.type
 })
 CREATE (node)-[:CONTAINS]->(nat)
 

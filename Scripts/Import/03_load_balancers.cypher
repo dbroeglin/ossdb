@@ -4,6 +4,8 @@
 // Format: Name,VIP,NatIP,BackendIP,BackendName,BackendDescription
 //
 
+// TODO: load both nodes as different configs
+
 CREATE INDEX ON :LoadBalancer(name);
 CREATE INDEX ON :LoadBalancerBackend(name);
 
