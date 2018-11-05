@@ -8,4 +8,3 @@ MERGE (nat)-[:HAS_ANOMALY]->(ano:Anomaly {
   code: 'llb_fqdn_without_dns',
   description: "No DNS entry for FQDN '" + fqdn.fqdn + "' of NAT entry" 
 })
-RETURN ano, nat

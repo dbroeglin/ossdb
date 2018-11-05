@@ -73,17 +73,19 @@ open('Sources/LoadBalancers/load_balancers.csv', 'w') { |f|
 
 open('Sources/Apache/apache_services.csv', 'w') { |f|
     f.puts "itEnv,name,service_description,hostname,service_ip,vhost_fqdn,vhost_aliases,worker,backend_hostname,backend_port"
-    f.puts 'PRD,FOO,FOOCOM,apache1.local,10.0.3.0,www.foo.com,"foo.com,foo.io",WRK1,foo-a,20.0.3.0'
-    f.puts 'PRD,FOO,FOOCOM,apache2.local,10.0.3.1,www.foo.com,"foo.com,foo.io",WRK1,foo-b,20.0.3.1'
-    f.puts 'PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-c,20.0.3.2'
-    f.puts 'PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-d,20.0.4.2'
-    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-e,20.0.3.3'
-    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-f,20.0.4.3'
+    f.puts 'PRD,FOO,FOOCOM,apache1.local,10.0.3.0,www.foo.com,"foo.com,foo.io",WRK1,foo-a,8080'
+    f.puts 'PRD,FOO,FOOCOM,apache2.local,10.0.3.1,www.foo.com,"foo.com,foo.io",WRK1,foo-b,8080'
+    f.puts 'PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-c,8080'
+    f.puts 'PRD,FOO,FOOCOM,apache3.local,10.0.3.2,www.foo.com,"foo.com,foo.io",WRK1,foo-d,8080'
+    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-e,8080'
+    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foo.com,"foo.com,foo.io",WRK1,foo-f,8080'
+    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foobar1.com,,,,'
+    f.puts 'PRD,FOO,FOOCOM,apache4.local,10.0.3.3,www.foobar2.com,,ProxyPass,backend,80'
     SIZE.times { |i|
-        f.puts 'PRD,FOO%d,FOOCOM %d,apache1.local,10.0.1.%d,www.foo%03d.com,,WRK1,foo-a,20.0.1.%d' % [i / 8, i, i, i, i, i]
-        f.puts 'PRD,FOO%d,FOOCOM %d,apache1.local,10.0.1.%d,www.foo%03d.com,,WRK1,foo-b,20.0.2.%d' % [i / 8, i, i, i, i, i]
-        f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-a,20.0.1.%d' % [i / 8, i, i, i, i, i]
-        f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-b,20.0.2.%d' % [i / 8, i, i, i, i, i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache1.local,10.0.1.%d,www.foo%03d.com,,WRK1,foo-a,%d' % [i / 8, i, i, i, 8000 + i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache1.local,10.0.1.%d,www.foo%03d.com,,WRK1,foo-b,%d' % [i / 8, i, i, i, 8001 + i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-a,%d' % [i / 8, i, i, i, 8000 + i]
+        f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-b,%d' % [i / 8, i, i, i, 8001 + i]
     }
 }
 
