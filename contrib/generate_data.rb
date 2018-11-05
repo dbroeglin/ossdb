@@ -45,7 +45,7 @@ open('Sources/DNS/dns_records.csv', 'w') { |f|
 open('Sources/LinkLoadBalancers/link_load_balancer.csv', 'w') { |f|
     f.puts "node,type,inRangeLow,inRangeHigh,routerIP,outRangeLow,outRangeHigh,FQDN"
     f.puts "llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
-    f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com bar.com"
+    f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com bar.com old.bar.com"
     f.puts "lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
     # f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.3.254,100.0.4.0,100.0.4.0,www.bar.com"
     SIZE.times { |i|

@@ -123,6 +123,7 @@ MATCH (zone:DNSZone)-->
 MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
       (oRange)-->(o:IPv4Address)
 MATCH (nat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
+// TODO LB
 // match Apache
 MATCH (instance:ApacheInstance)-->(service:ApacheService)-->
       (vhost:ApacheVirtualHost)
@@ -132,3 +133,9 @@ MATCH (vhost)-[:HAS_FQDN]->(apacheFQDN:ApacheFQDN)
 MATCH (apacheFQDN)--(llbFQDN)
 WHERE 'www.foo.com' = llbFQDN.fqdn AND dns.name + '.' + zone.name = llbFQDN.fqdn
 RETURN nat, oRange, o, iRange, i, llbFQDN, node, instance, service, vhost, apacheFQDN
+
+
+
+// Do we have a path between FQDM www.foo.com and node apache3.local
+MATCH (node:Node {name: 'apache3.local'}),(fqdn:ApacheFQDN {fqdn: 'www.foo.com'}), p = shortestPath((node)-[*]-(fqdn))
+RETURN p

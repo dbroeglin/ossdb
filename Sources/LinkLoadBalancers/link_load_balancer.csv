@@ -1,6 +1,6 @@
 node,type,inRangeLow,inRangeHigh,routerIP,outRangeLow,outRangeHigh,FQDN
 llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com
-llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com bar.com
+llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com bar.com old.bar.com
 lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com
 llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo000.com
 llbb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo000.com

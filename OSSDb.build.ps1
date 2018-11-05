@@ -11,10 +11,10 @@ Task Import PrepareImports, {
     Sort-Object -Property Name |
     ForEach-Object {
         Write-Information "Processing reload script $_..."
-        (Get-Content -Raw $_) -split ';' |
+        (Get-Content -Raw $_) -split ';' | # TODO: potential bug if ; in comments, also multiline
         Where-Object { -not [String]::IsNullOrWhiteSpace(($_ -replace '//.*', '')) } |
         ForEach-Object {
-            Write-Verbose "Processing reload command:`n$_"
+            Write-Information "Processing reload command:`n$_"
             $Session.Run($_)
         }
     }
@@ -25,7 +25,6 @@ Task Clean {
 }
 
 Task CleanDatabase {
-    $Session.Run("MATCH (a)-[r]-(b) DETACH DELETE r,a,b")
     $Session.Run("MATCH(a) DETACH DELETE a")
 }
 
@@ -43,4 +42,19 @@ Task PrepareImports -Partial -Inputs {
         Write-Host "-- Processing $_ -> $2"
         Copy-Item -Path $_ -Destination $2 
     }
+}
+
+Task Analysis CleanDatabase, Import, {
+    Write-Information "Analysing..."
+    Get-ChildItem -Recurse $PSScriptRoot\Scripts\Analysis -Include *.cypher |
+    Sort-Object -Property Name |
+    ForEach-Object {
+        Write-Information "Processing reload script $_..."
+        (Get-Content -Raw $_) -split ';' | # TODO: potential bug if ; in comments, also multiline
+        Where-Object { -not [String]::IsNullOrWhiteSpace(($_ -replace '//.*', '')) } |
+        ForEach-Object {
+            Write-Information "Processing reload command:`n$_"
+            $Session.Run($_)
+        }
+    }    
 }
