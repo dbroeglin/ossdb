@@ -24,3 +24,13 @@ web interface.
 ### Install Invoke Build
 
     Install-Module InvokeBuild
+
+### Install Neo4j
+
+#### On MacOS X with Homebrew
+
+    brew install neo4j
+
+#### On Windows with Chocolatey
+
+    choco install neo4j-community
