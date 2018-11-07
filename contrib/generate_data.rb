@@ -34,6 +34,7 @@ open('Sources/DNS/dns_records.csv', 'w') { |f|
     f.puts "zoneName,recName,recType,recValue"
     f.puts "foo.com,www,A,100.0.3.0"
     f.puts "bar.com,www,A,100.0.4.0"
+    f.puts "bar.com,www,A,100.0.4.1"
     f.puts "foobar.com,www,CNAME,www.bar.com"
     SIZE.times { |i|
         k = i * 2

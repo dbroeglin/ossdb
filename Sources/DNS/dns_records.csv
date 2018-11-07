@@ -1,6 +1,7 @@
 zoneName,recName,recType,recValue
 foo.com,www,A,100.0.3.0
 bar.com,www,A,100.0.4.0
+bar.com,www,A,100.0.4.1
 foobar.com,www,CNAME,www.bar.com
 foo000.com,www,A,100.0.1.0
 bar000.com,www,A,100.0.2.0
