@@ -1,26 +1,30 @@
 SIZE = 25
 
-open('Sources/Hosts/hosts.csv', 'w') { |f|
-    f.puts "name,memory,cores"
-    f.puts "jeexxx01,2048,4"
-    f.puts "jeexxx02,2048,4"
-    f.puts "jeexxx03,2048,4"
-    f.puts "jeexxx04,2048,4"
-    SIZE.times { |i|
-        j = i * 4
-        f.puts "jeetest%04d,4092,2" % j
-        f.puts "jeetest%04d,4092,2" % (j + 1)
-        f.puts "jeetest%04d,8192,8" % (j + 2)
-        f.puts "jeetest%04d,8192,8" % (j + 3)
-    }
-}
 
-open('Sources/Hosts/hosts_ips.csv', 'w') { |f|
-    f.puts "name,ipv4Address"
+#open('Sources/Nodes/nodes.csv', 'w') { |f|
+#    f.puts "name,memory,cores"
+#    f.puts "jeexxx01,2048,4"
+#    f.puts "jeexxx02,2048,4"
+#    f.puts "jeexxx03,2048,4"
+#    f.puts "jeexxx04,2048,4"
+#    SIZE.times { |i|
+#        j = i * 4
+#        f.puts "jeetest%04d,4092,2" % j
+#        f.puts "jeetest%04d,4092,2" % (j + 1)
+#        f.puts "jeetest%04d,8192,8" % (j + 2)
+#        f.puts "jeetest%04d,8192,8" % (j + 3)
+#    }
+#}
+
+open('Sources/Nodes/node_ips.csv', 'w') { |f|
+    f.puts "Hostname,IP"
     f.puts "jeexxx01,10.0.3.0"
     f.puts "jeexxx02,10.0.3.1"
     f.puts "jeexxx03,10.0.3.2"
     f.puts "jeexxx04,10.0.3.3"
+    f.puts "jeexxx04,10.0.4.1"
+    f.puts "jeexxx04,10.0.4.2"
+    f.puts "jeexxx04,10.0.4.3"
     SIZE.times { |i|
         j = i * 4
         f.puts "jeetest%04d,10.0.1.%d" % [j, i]
@@ -36,9 +40,14 @@ open('Sources/DNS/dns_records.csv', 'w') { |f|
     f.puts "bar.com,www,A,100.0.4.0"
     f.puts "bar.com,www,A,100.0.4.1"
     f.puts "foobar.com,www,CNAME,www.bar.com"
+    
+    # LLB addresses
+    f.puts "acme.com,lla,A,100.100.0.1"
+    f.puts "acme.com,llb,A,100.100.0.2"
     SIZE.times { |i|
         k = i * 2
-        f.puts "foo%03d.com,www,A,100.0.1.%d" % [i, k]
+        f.puts "foo%03d.com,www,NS,llba.acme.com" % [i, k]
+        f.puts "foo%03d.com,www,NS,llbb.acme.com" % [i, k]
         f.puts "bar%03d.com,www,A,100.0.2.%d" % [i, k]
     }
 }
@@ -48,6 +57,7 @@ open('Sources/LinkLoadBalancers/link_load_balancer.csv', 'w') { |f|
     f.puts "llba,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
     f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.4.254,100.0.4.0,100.0.4.0,www.bar.com bar.com old.bar.com"
     f.puts "lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
+    f.puts "llla,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.5.0,100.0.5.0," # empty FQDN
     # f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.3.254,100.0.4.0,100.0.4.0,www.bar.com"
     SIZE.times { |i|
         f.puts "llba,static,1.0.3.%d,1.0.3.%d,100.0.3.254,100.0.3.%d,100.0.3.%d,www.foo%03d.com" % [i, i, i, i, i]

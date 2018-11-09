@@ -43,6 +43,10 @@ MERGE  (outRangeHigh:  IPv4Address {
     address: csv.outRangeHigh
 })
 CREATE (outRange)-[:HIGH_ADDRESS]->(outRangeHigh)
+
+WITH nat, csv
+WHERE csv.FQDN <> ""
+
 WITH nat, SPLIT(csv.FQDN, " ") AS fqdns
 UNWIND fqdns AS fqdn
 MERGE (llbFQDN:LinkLoadBalancerFQDN {fqdn: fqdn})

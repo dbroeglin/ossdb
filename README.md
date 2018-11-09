@@ -19,6 +19,7 @@ web interface.
 ## Setup
 
 ### Install the Neo4j DotNet driver
+
     nuget install Neo4j.Driver -OutputDirectory ./nuget/
 
 ### Install Invoke Build

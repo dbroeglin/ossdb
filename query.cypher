@@ -114,7 +114,64 @@ MATCH (service)-[:HAS_ADDRESS]->(vip:IPv4Address)
 MATCH (vhost)-[:HAS_FQDN]->(fqdn:ApacheFQDN)
 RETURN instance, service, vhost, node, vip, fqdn
 
-// Match a full route
+//
+// DNS PoV
+//
+
+// match on DNS
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE]->(dnsValue:DNSRecordValue)
+WHERE dns.name <> '@' AND NOT (dr.type IN ['PTR', 'SRV'])
+
+OPTIONAL MATCH (nat:LinkLoadBalancerNat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
+WHERE nat IS NULL OR dns.name + '.' + zone.name = llbFQDN.fqdn
+OPTIONAL MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat)-->
+      (oRange)-->(o:IPv4Address)
+
+RETURN DISTINCT dns.name + '.' + zone.name, dr.type, o.address, i.address
+
+
+//
+// Find FQDNs that use A records with LLB
+//
+
+// match on DNS
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
+// match LLB
+MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
+      (oRange)-->(o:IPv4Address)
+MATCH (nat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
+WHERE dns.name + '.' + zone.name = llbFQDN.fqdn
+RETURN DISTINCT llbFQDN.fqdn
+
+
+
+//
+// Match a full route (using A records)
+//
+
+// match on DNS
+MATCH (zone:DNSZone)-->
+      (dns:DNSRecordName)-[dr:HAS_VALUE{type: 'A'}]->(dnsValue:DNSRecordValue)
+// match LLB
+MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat:LinkLoadBalancerNat)-->
+      (oRange)-->(o:IPv4Address)
+MATCH (nat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
+// TODO LB
+// match Apache
+MATCH (instance:ApacheInstance)-->(service:ApacheService)-->
+      (vhost:ApacheVirtualHost)
+MATCH (node:Node)-[:CONTAINS]->(instance)
+MATCH (service)-[:HAS_ADDRESS]->(vip:IPv4Address)
+MATCH (vhost)-[:HAS_FQDN]->(apacheFQDN:ApacheFQDN)
+MATCH (apacheFQDN)--(llbFQDN)
+WHERE 'www.foo.com' = llbFQDN.fqdn AND dns.name + '.' + zone.name = llbFQDN.fqdn
+RETURN nat, oRange, o, iRange, i, llbFQDN, node, instance, service, vhost, apacheFQDN
+
+//
+// Match a full route (using NS records)
+//
 
 // match on DNS
 MATCH (zone:DNSZone)-->
