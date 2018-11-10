@@ -4,3 +4,4 @@ IP Address,Hostname,MAC Address,Last Synchronization,Status
 10.0.3.2,apache1,02-02-03-04-05-06,2018-11-01T00:01:00,Used
 10.0.3.3,apache2,03-02-03-04-05-06,2018-11-03T00:01:00,Used
 10.0.3.4,,,,Reserved
+1.0.2.2,foobarnode,03-02-03-04-05-06,2018-11-03T00:01:00,Used

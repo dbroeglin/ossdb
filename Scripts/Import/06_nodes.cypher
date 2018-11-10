@@ -19,5 +19,4 @@ MERGE(node:Node {
     name: csv.Hostname
 }) 
 MERGE (node)-[:HAS_ADDRESS]->(ip)
-RETURN csv.IP
 ;
