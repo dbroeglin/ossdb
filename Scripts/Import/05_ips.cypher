@@ -12,7 +12,7 @@ LOAD CSV WITH HEADERS
 FROM "file:///ips.csv" as csv
 CREATE (ips:IPSEntry {
   address: csv.`IP Address`,
-  lastSync: csv.`Last Synchronization`,
+  lastSync: datetime(csv.`Last Synchronization`),
   status: csv.Status
 })
 MERGE (ip:IPv4Address { 
