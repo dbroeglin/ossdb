@@ -12,7 +12,7 @@ LOAD CSV WITH HEADERS
 FROM "file:///ips.csv" as csv
 CREATE (ips:IPSEntry {
   address: csv.`IP Address`,
-  lastSync: CASE WHEN csv.`Last Synchronization` <> '' THEN NULL ELSE datetime(csv.`Last Synchronization`) END,
+  lastSync: CASE WHEN csv.`Last Synchronization` = '' THEN NULL ELSE datetime(csv.`Last Synchronization`) END,
   status: csv.Status
 })
 MERGE (ip:IPv4Address { 

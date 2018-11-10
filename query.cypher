@@ -125,10 +125,11 @@ WHERE dns.name <> '@' AND NOT (dr.type IN ['PTR', 'SRV'])
 
 OPTIONAL MATCH (nat:LinkLoadBalancerNat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
 WHERE nat IS NULL OR dns.name + '.' + zone.name = llbFQDN.fqdn
+
 OPTIONAL MATCH (i:IPv4Address)<--(iRange)<-[:IN]-(nat)-->
       (oRange)-->(o:IPv4Address)
 
-RETURN DISTINCT dns.name + '.' + zone.name, dr.type, o.address, i.address
+RETURN DISTINCT dns.name + '.' + zone.name AS fqdn, dns.name, zone.name, dr.type, o.address, i.address
 
 
 //
@@ -196,3 +197,8 @@ RETURN nat, oRange, o, iRange, i, llbFQDN, node, instance, service, vhost, apach
 // Do we have a path between FQDM www.foo.com and node apache3.local
 MATCH (node:Node {name: 'apache3.local'}),(fqdn:ApacheFQDN {fqdn: 'www.foo.com'}), p = shortestPath((node)-[*]-(fqdn))
 RETURN p
+
+// Match IPS entries that where seen less than n days ago
+MATCH(entry:IPSEntry)
+WHERE entry.lastSync > (datetime() - duration({days: 9}))
+RETURN entry
