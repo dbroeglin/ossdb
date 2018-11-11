@@ -101,7 +101,7 @@ RETURN nat, i, iRange, o, oRange, fqdn
 // Find load balancer for "Foo"
 
 MATCH (lb:LoadBalancer{name: 'Foo'})-->(lbb:LoadBalancerBackend)-[:HAS_ADDRESS]->(bip:IPv4Address)
-MATCH (lb)-[:VIP]->(vip:IPv4Address)
+MATCH (lb)-[:HAS_VIRTUAL_IP]->(vip:IPv4Address)
 RETURN lb, lbb, bip, vip
 ;
 

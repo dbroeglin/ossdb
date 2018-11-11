@@ -14,7 +14,7 @@ LOAD CSV WITH HEADERS
 FROM "file:///load_balancers.csv" as csv
 MERGE (loadbalancer:LoadBalancer {name : csv.Name})
 MERGE (vip:IPv4Address {address: csv.VIP})
-MERGE (loadbalancer)-[:VIP]->(vip)
+MERGE (loadbalancer)-[:HAS_VIRTUAL_IP]->(vip)
 CREATE (backend:LoadBalancerBackend { 
     name         : csv.BackendName, 
     description  : csv.BackendDescription
