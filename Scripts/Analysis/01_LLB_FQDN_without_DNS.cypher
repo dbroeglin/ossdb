@@ -3,11 +3,13 @@ OPTIONAL MATCH (zone:DNSZone)-->
                (dns:DNSRecordName)-[dr:HAS_VALUE]->(dnsValue:DNSRecordValue)
 WHERE fqdn.fqdn = dns.name + '.' + zone.name AND
       dr.type IN ['A', 'CNAME']
-WITH nat, fqdn, dns
+WITH DISTINCT collect(nat) AS nats, fqdn, dns
 WHERE dns IS null
-MERGE (nat)-[:HAS_ANOMALY]->(ano:Anomaly {
+MERGE (fqdn)-[:HAS_ANOMALY]->(ano:Anomaly {
   code: 'llb_fqdn_without_dns',
-  description: "No DNS entry for FQDN '" + fqdn.fqdn + "'" 
+  description: "No DNS entry for LLB FQDN '" + fqdn.fqdn + "'" 
 })
-CREATE (fqdn)-[:HAS_ANOMALY]->(ano)
+WITH ano, nats
+UNWIND nats AS nat
+CREATE (nat)-[:HAS_ANOMALY]->(ano)
 ;
