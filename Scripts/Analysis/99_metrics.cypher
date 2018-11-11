@@ -46,10 +46,10 @@ CREATE (metric:Metric {
 
 MATCH (nat:LinkLoadBalancerNat)-[:IN]->(range)-[:HIGH_ADDRESS|:LOW_ADDRESS]->(ip:IPv4Address)
 WHERE NOT ip.address =~ $LoadBalancerIPRegex
-WITH DISTINCT nat, range, ip
+WITH DISTINCT ip
 OPTIONAL MATCH (entry:IPSEntry)-[:HAS_ADDRESS]->(ip)
-WITH DISTINCT collect(nat) AS nats, range, ip, entry
-WHERE entry IS NULL OR entry.lastSync > (datetime() - duration({days: 60}))
+WITH DISTINCT ip, entry
+WHERE entry IS NULL OR entry.lastSync < (datetime() - duration({days: 60}))
 WITH count(DISTINCT ip) as value
 CREATE (metric:Metric {
     scope: 'Link Load Balancer',

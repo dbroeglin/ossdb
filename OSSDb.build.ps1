@@ -64,13 +64,13 @@ Task Analysis CleanDatabase, Import, {
 "@ | Sort-Object -Property scope, label
 }
 
-Task Export {
+Task ExportAnomalies {
     Invoke-Neo4j -Session $Session -Query @'
-        MATCH (a:Anomaly)<--(n) 
-        WHERE a.code IN $codes
+        MATCH (a:Anomaly)<-[:HAS_ANOMALY]-(n) 
         WITH a, collect(DISTINCT n) as n
-        RETURN a, n
-'@ -Parameters @{ codes = @('llb_fqdn_without_dns', 'dummy')}
+        ORDER by a.code, a.description
+        RETURN a.code AS code, a.description AS description, n
+'@
 }
 
 function Invoke-Neo4j {
