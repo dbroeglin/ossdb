@@ -35,20 +35,20 @@ open('Sources/Nodes/node_ips.csv', 'w') { |f|
 }
 
 open('Sources/DNS/dns_records.csv', 'w') { |f|
-    f.puts "zoneName,recName,recType,recValue"
-    f.puts "foo.com,www,A,100.0.3.0"
-    f.puts "bar.com,www,A,100.0.4.0"
-    f.puts "bar.com,www,A,100.0.4.1"
-    f.puts "foobar.com,www,CNAME,www.bar.com"
+    f.puts "srvName,zoneName,recName,recType,recValue"
+    f.puts "dnssrv1,foo.com,www,A,100.0.3.0"
+    f.puts "dnssrv1,bar.com,www,A,100.0.4.0"
+    f.puts "dnssrv1,bar.com,www,A,100.0.4.1"
+    f.puts "dnssrv2,foobar.com,www,CNAME,www.bar.com"
     
     # LLB addresses
-    f.puts "acme.com,lla,A,100.100.0.1"
-    f.puts "acme.com,llb,A,100.100.0.2"
+    f.puts "dnssrv1,acme.com,lla,A,100.100.0.1"
+    f.puts "dnssrv1,acme.com,llb,A,100.100.0.2"
     SIZE.times { |i|
         k = i * 2
-        f.puts "foo%03d.com,www,NS,llba.acme.com" % [i, k]
-        f.puts "foo%03d.com,www,NS,llbb.acme.com" % [i, k]
-        f.puts "bar%03d.com,www,A,100.0.2.%d" % [i, k]
+        f.puts "dnssrv1,foo%03d.com,www,NS,llba.acme.com" % [i, k]
+        f.puts "dnssrv1,foo%03d.com,www,NS,llbb.acme.com" % [i, k]
+        f.puts "dnssrv1,bar%03d.com,www,A,100.0.2.%d" % [i, k]
     }
 }
 

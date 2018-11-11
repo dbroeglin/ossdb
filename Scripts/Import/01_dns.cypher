@@ -1,7 +1,7 @@
 //
 // DNS Records
 //
-// Format: zoneName,recName,recType,recValue
+// Format: srvName,zoneName,recName,recType,recValue
 //
 
 CREATE INDEX ON :DNSZone(name);
@@ -12,9 +12,13 @@ CREATE INDEX ON :DNSRecordValue(value);
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS 
 FROM "file:///dns_records.csv" as csv
+MERGE (node:Node {
+    name: toLower(csv.srvName)
+})
 MERGE (zone:DNSZone { 
     name: csv.zoneName
 })
+MERGE (node)-[:CONTAINS]->(zone)
 MERGE (name:DNSRecordName {
     zone: csv.zoneName,
     name: csv.recName,
