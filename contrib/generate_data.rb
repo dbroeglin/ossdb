@@ -40,7 +40,7 @@ open('Sources/DNS/dns_records.csv', 'w') { |f|
     f.puts "dnssrv1,bar.com,www,A,100.0.4.0"
     f.puts "dnssrv1,bar.com,www,A,100.0.4.1"
     f.puts "dnssrv2,foobar.com,www,CNAME,www.bar.com"
-    
+
     # LLB addresses
     f.puts "dnssrv1,acme.com,lla,A,100.100.0.1"
     f.puts "dnssrv1,acme.com,llb,A,100.100.0.2"
@@ -59,6 +59,7 @@ open('Sources/LinkLoadBalancers/link_load_balancer.csv', 'w') { |f|
     f.puts "lllb,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.3.0,100.0.3.0,www.foo.com foo.com"
     f.puts "llla,static,1.0.3.0,1.0.3.0,100.0.3.254,100.0.5.0,100.0.5.0," # empty FQDN
     # f.puts "llba,static,1.0.4.0,1.0.4.0,100.0.3.254,100.0.4.0,100.0.4.0,www.bar.com"
+    f.puts "llla,dynamic,1.0.9.0,1.0.9.0,100.0.9.254,100.0.9.0,100.0.9.0," # dynamic NAT
     SIZE.times { |i|
         f.puts "llba,static,1.0.3.%d,1.0.3.%d,100.0.3.254,100.0.3.%d,100.0.3.%d,www.foo%03d.com" % [i, i, i, i, i]
         f.puts "llbb,static,1.0.3.%d,1.0.3.%d,100.0.3.254,100.0.3.%d,100.0.3.%d,www.foo%03d.com" % [i, i, i, i, i]
@@ -99,5 +100,3 @@ open('Sources/Apache/apache_services.csv', 'w') { |f|
         f.puts 'PRD,FOO%d,FOOCOM %d,apache2.local,10.0.2.%d,www.foo%03d.com,,WRK1,foo-b,%d' % [i / 8, i, i, i, 8001 + i]
     }
 }
-
-
