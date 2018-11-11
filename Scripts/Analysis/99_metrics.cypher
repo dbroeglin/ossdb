@@ -52,3 +52,16 @@ CREATE (metric:Metric {
     value: value
 })
 ;
+
+//
+// Load balancers
+//
+MATCH (lb:LoadBalancer)-[:HAS_VIRTUAL_IP]->(ip:IPv4Address)
+WHERE ip.address =~ $LoadBalancerIPRegex
+WITH count(DISTINCT lb) as value
+CREATE (metric:Metric {
+    scope: 'Load Balancer',
+    label: 'Nb',
+    value: value
+})
+;
