@@ -44,20 +44,6 @@ CREATE (metric:Metric {
 })
 ;
 
-MATCH (nat:LinkLoadBalancerNat)-[:IN]->(range)-[:HIGH_ADDRESS|:LOW_ADDRESS]->(ip:IPv4Address)
-WHERE NOT ip.address =~ $LoadBalancerIPRegex
-WITH DISTINCT ip
-OPTIONAL MATCH (entry:IPSEntry)-[:HAS_ADDRESS]->(ip)
-WITH DISTINCT ip, entry
-WHERE entry IS NULL OR entry.lastSync < (datetime() - duration({days: 60}))
-WITH count(DISTINCT ip) as value
-CREATE (metric:Metric {
-    scope: 'Link Load Balancer',
-    label: 'Abandonned internal IP (not LB VIP, no IPS entry)',
-    value: value
-})
-;
-
 MATCH (nat:LinkLoadBalancerNat)-[:HAS_FQDN]->(llbFQDN:LinkLoadBalancerFQDN)
 WITH count(DISTINCT llbFQDN.fqdn) as value
 CREATE (metric:Metric {

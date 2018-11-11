@@ -61,7 +61,14 @@ Task Analysis CleanDatabase, Import, {
     Invoke-Neo4j -Session $Session -Query @"
         MATCH (m:Metric) 
         RETURN m.scope as scope, m.label as label, m.value as value
-"@ | Sort-Object -Property scope, label
+        ORDER by scope, label
+"@ | Format-Table
+
+    Invoke-Neo4j -Session $Session -Query @"
+        MATCH (a:Anomaly) 
+        RETURN a.code AS code, count(DISTINCT a) AS value
+        ORDER BY code
+"@ | Format-Table
 }
 
 Task ExportAnomalies {
@@ -70,7 +77,7 @@ Task ExportAnomalies {
         WITH a, collect(DISTINCT n) as n
         ORDER by a.code, a.description
         RETURN a.code AS code, a.description AS description, n
-'@
+'@ | Format-Table
 }
 
 function Invoke-Neo4j {
