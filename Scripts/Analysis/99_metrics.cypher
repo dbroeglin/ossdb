@@ -15,7 +15,7 @@ CREATE (metric:Metric {
 // 
 // Link Load Balancer
 //
-MATCH (nat:LinkLoadBalancerNat)-->(oRange)-->(o:IPv4Address)
+MATCH (nat:LinkLoadBalancerNat)-[:OUT]->(oRange)-[:HIGH_ADDRESS|:LOW_ADDRESS]->(o:IPv4Address)
 WITH count(DISTINCT o) as value
 CREATE (metric:Metric {
     scope: 'Link Load Balancer', 
