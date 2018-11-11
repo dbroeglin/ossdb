@@ -56,7 +56,12 @@ Task Analysis CleanDatabase, Import, {
             Write-Verbose "Processing reload command:`n$_"
             Invoke-Neo4j -Session $Session -Query $_ -Parameters $Config.AnalysisParameters
         }
-    }    
+    }
+
+    Invoke-Neo4j -Session $Session -Query @"
+        MATCH (m:Metric) 
+        RETURN m.scope as scope, m.label as label, m.value as value
+"@ | Sort-Object -Property scope, label
 }
 
 Task Export {
@@ -66,18 +71,6 @@ Task Export {
         WITH a, collect(DISTINCT n) as n
         RETURN a, n
 '@ -Parameters @{ codes = @('llb_fqdn_without_dns', 'dummy')}
-}
-
-function Format-Neo4jNode {
-    Param($Node)
-
-    [PSCustomObject]@{
-        Id = $Node.Id
-        Label = $Node.Labels
-        Properties = $Node.Properties.Keys | ForEach-Object { $result = @{} } {
-            $result[$_] = $Node.Properties.$_
-        } { [PSCustomObject]$result }
-    } | Format-Table
 }
 
 function Invoke-Neo4j {
@@ -98,9 +91,13 @@ function Invoke-Neo4j {
             $queryParams.Add([String]($_.Name), $_.Value) 
         }
 
-        return $Session.Run($Query, $queryParams).Values
+        $result = $Session.Run($Query, $queryParams).Values
     } else {
-        return $Session.Run($Query).Values
+        $result = $Session.Run($Query).Values
     }
-
+    foreach($record in $result) {
+        $record.Keys | ForEach-Object { $res = [PSCustomObject]::new() } {
+            Add-Member -MemberType NoteProperty -Name $_ -Value $record[$_] -InputObject $res
+        } { $res }
+    }
 }
