@@ -10,3 +10,6 @@ MERGE (ip)-[:HAS_ANOMALY]->(ano:Anomaly {
   code: 'ip_without_node_info',
   description: "No Node information was found for IP '" + ip.address + "' (found though LLB IN)" 
 })
+CREATE (nat)-[:HAS_ANOMALY]->(ano)
+;
+
