@@ -12,7 +12,7 @@ USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS 
 FROM "file:///link_load_balancer.csv" as csv
 MERGE (node:Node { 
-    name: csv.node
+    name: toLower(csv.node)
 })
 CREATE (nat:LinkLoadBalancerNat { 
     fqdn: SPLIT(csv.FQDN, " "),
