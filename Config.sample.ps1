@@ -5,7 +5,7 @@ $Config = @{
 
   AnalysisParameters = @{
     # Matched IPs are considered LB VIPs and are not expected to have an attached node
-    LoadBalancerIPRegex = '1\.0\.[23]\..*'
+    DMZLoadBalancerIPRegex = '1\.0\.[23]\..*'
     
     # Only consider zones contained in those hosts as external
     ExternalDNSNodes    = @('dnssrv1') 

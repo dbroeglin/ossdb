@@ -2,7 +2,7 @@
 MATCH (nat:LinkLoadBalancerNat)-[:IN]->(i)-[:LOW_ADDRESS|:HIGH_ADDRESS]->(ip:IPv4Address),
       (ipsEntry:IPSEntry {status: 'Used'})-[:HAS_ADDRESS]->(ip)
 WHERE ipsEntry.lastSync > (datetime() - duration({days: 60})) AND // IPs seen in the last 2 months
-      NOT ip.address =~ $LoadBalancerIPRegex                      // exclude load balancer VIPs
+      NOT ip.address =~ $DMZLoadBalancerIPRegex                      // exclude load balancer VIPs
 OPTIONAL MATCH (n:Node)-[:HAS_ADDRESS]->(ip)                      // match associated nodes
 WITH DISTINCT collect(nat) as nats, i, ipsEntry, ip, n
 WHERE n IS NULL
