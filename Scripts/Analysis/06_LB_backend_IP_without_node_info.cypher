@@ -1,6 +1,6 @@
 MATCH (lb:LoadBalancer)-[:BALANCES_TO]->(lbb:LoadBalancerBackend)-[:HAS_ADDRESS]->(ip:IPv4Address),
-      (entry:IPSEntry)-[:HAS_ADDRESS {status: 'Used'}]->(ip)
-WHERE entry IS NULL OR entry.lastSync < (datetime() - duration({days: 60}))
+      (entry:IPSEntry {status: 'Used'})-[:HAS_ADDRESS]->(ip)
+WHERE entry.lastSync > (datetime() - duration({days: 60}))
 
 MATCH (lb)-[:HAS_VIRTUAL_IP]->(vip:IPv4Address)
 WHERE vip.address =~ $DMZLoadBalancerIPRegex                       // Only look for DMZ LBs
