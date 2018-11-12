@@ -65,3 +65,21 @@ CREATE (metric:Metric {
     value: value
 })
 ;
+
+//
+// Nodes
+//
+
+MATCH (entry:IPSEntry {status: 'Used'})-[:HAS_ADDRESS]->(ip:IPv4Address)
+WHERE ip.address =~ $DMZIPRegex AND
+      entry.lastSync > (datetime() - duration({days: 60}))
+
+MATCH (node:Node)-[:HAS_ADDRESS]->(ip)
+
+WITH count(DISTINCT node) AS value
+CREATE (metric:Metric {
+    scope: 'Node',
+    label: 'Nb',
+    value: value
+})
+;
