@@ -2,7 +2,7 @@ MATCH (nat:LinkLoadBalancerNat)-[:HAS_FQDN]->(fqdn:LinkLoadBalancerFQDN)
 OPTIONAL MATCH (zone:DNSZone)-->
                (dns:DNSRecordName)-[dr:HAS_VALUE]->(dnsValue:DNSRecordValue)
 WHERE fqdn.fqdn = dns.name + '.' + zone.name AND
-      dr.type IN ['A', 'CNAME']
+      dr.type IN ['A', 'CNAME', 'NS']
 WITH DISTINCT collect(nat) AS nats, fqdn, dns
 WHERE dns IS null
 MERGE (fqdn)-[:HAS_ANOMALY]->(ano:Anomaly {
