@@ -1,6 +1,9 @@
 Param(
     [String]
-    $SourcesPath = "$PSScriptRoot\Sources"
+    $SourcesPath = "$PSScriptRoot\Sources",
+
+    [String]
+    $OutputPath = "$PSScriptRoot\Output"
 )
 . $PSScriptRoot\Connect.ps1
 
@@ -20,7 +23,7 @@ Task Import PrepareImports, {
     }
 }
 
-Task Clean {
+Task CleanImportPath {
     Get-ChildItem $Config.Neo4jImportPath -Recurse -Include '*.csv' | Remove-Item -Force
 }
 
@@ -72,12 +75,34 @@ Task Analysis CleanDatabase, Import, {
 }
 
 Task ExportAnomalies {
-    Invoke-Neo4j -Session $Session -Query @'
-        MATCH (a:Anomaly)<-[:HAS_ANOMALY]-(n) 
-        WITH a, collect(DISTINCT n) as n
-        ORDER by a.code, a.description
-        RETURN a.code AS code, a.description AS description, n
-'@ | Format-Table
+    "lb_backend_ip_without_ips_entry", "lb_backend_ip_without_backend", "lb_backend_ip_without_node_info" | ForEach-Object {
+        Invoke-Neo4j -Session $Session -Query @"
+            MATCH (a:Anomaly {code: '$_' })<-[:HAS_ANOMALY]-(lb:LoadBalancer) 
+            MATCH (a)<-[:HAS_ANOMALY]-(ip:IPv4Address) 
+            WITH a, lb, collect(DISTINCT ip) as ips
+            ORDER by a.description
+            RETURN a.description AS description, lb.name as lbName, 
+                reduce(s = head(ips).address, n IN tail(ips) | s + ', ' + n.address) as IPs
+"@ | Export-Csv "$OutputPath/$_.csv" -Encoding utf8
+    }
+
+    Invoke-Neo4j -Session $Session -Query @"
+        MATCH (a:Anomaly {code: 'llb_fqdn_without_dns' })<-[:HAS_ANOMALY]-(llb:LinkLoadBalancerNat) 
+        MATCH (a)<-[:HAS_ANOMALY]-(fqdn:LinkLoadBalancerFQDN)
+        WITH a, llb, fqdn
+        ORDER by a.description
+        RETURN a.description AS description, llb.node as llbNode, fqdn.fqdn as FQDN
+"@ | Export-Csv "$OutputPath/llb_fqdn_without_dns.csv" -Encoding utf8
+
+    Invoke-Neo4j -Session $Session -Query @"
+        MATCH (a:Anomaly {code: 'llb_internal_ip_without_ips_entry' })<-[:HAS_ANOMALY]-(llb:LinkLoadBalancerNat) 
+        MATCH (a)<-[:HAS_ANOMALY]-(ip:IPv4Address)
+        WITH a, llb, collect(DISTINCT ip) as ips
+        ORDER by a.description
+        RETURN a.description AS description, llb.node as llbNode, 
+            reduce(s = head(ips).address, n IN tail(ips) | s + ', ' + n.address) as IPs
+"@ | Export-Csv "$OutputPath/llb_internal_ip_without_ips_entry.csv" -Encoding utf8
+
 }
 
 function Invoke-Neo4j {

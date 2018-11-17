@@ -9,7 +9,7 @@ WHERE entry IS NULL OR entry.lastSync < (datetime() - duration({days: 60}))
 
 CREATE (ano:Anomaly {
   code: 'lb_backend_ip_without_ips_entry',
-  description: "No IPS data for LB backend IP '" + 
+  description: "No IPS data for LB '" + lb.name + "' backend IPs '" + 
     reduce(s = head(ips).address, n IN tail(ips) | s + ', ' + n.address) + "'" 
 })
 CREATE (lb)-[:HAS_ANOMALY]->(ano)
